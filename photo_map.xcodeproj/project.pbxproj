@@ -7,6 +7,23 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FF8373511DC63FD100B99C6F /* austria-low.svg in Resources */ = {isa = PBXBuildFile; fileRef = FF83733C1DC63FD100B99C6F /* austria-low.svg */; };
+		FF8373521DC63FD100B99C6F /* beef-cuts.svg in Resources */ = {isa = PBXBuildFile; fileRef = FF83733D1DC63FD100B99C6F /* beef-cuts.svg */; };
+		FF8373531DC63FD100B99C6F /* china-low.svg in Resources */ = {isa = PBXBuildFile; fileRef = FF83733E1DC63FD100B99C6F /* china-low.svg */; };
+		FF8373541DC63FD100B99C6F /* europe.svg in Resources */ = {isa = PBXBuildFile; fileRef = FF83733F1DC63FD100B99C6F /* europe.svg */; };
+		FF8373551DC63FD100B99C6F /* france-low.svg in Resources */ = {isa = PBXBuildFile; fileRef = FF8373401DC63FD100B99C6F /* france-low.svg */; };
+		FF8373561DC63FD100B99C6F /* germany.svg in Resources */ = {isa = PBXBuildFile; fileRef = FF8373411DC63FD100B99C6F /* germany.svg */; };
+		FF8373571DC63FD100B99C6F /* india-low.svg in Resources */ = {isa = PBXBuildFile; fileRef = FF8373421DC63FD100B99C6F /* india-low.svg */; };
+		FF8373581DC63FD100B99C6F /* italy.svg in Resources */ = {isa = PBXBuildFile; fileRef = FF8373431DC63FD100B99C6F /* italy.svg */; };
+		FF8373591DC63FD100B99C6F /* uk-low.svg in Resources */ = {isa = PBXBuildFile; fileRef = FF8373441DC63FD100B99C6F /* uk-low.svg */; };
+		FF83735A1DC63FD100B99C6F /* usa-low.svg in Resources */ = {isa = PBXBuildFile; fileRef = FF8373451DC63FD100B99C6F /* usa-low.svg */; };
+		FF83735B1DC63FD100B99C6F /* world-continents-low.svg in Resources */ = {isa = PBXBuildFile; fileRef = FF8373461DC63FD100B99C6F /* world-continents-low.svg */; };
+		FF83735C1DC63FD100B99C6F /* world-low.svg in Resources */ = {isa = PBXBuildFile; fileRef = FF8373471DC63FD100B99C6F /* world-low.svg */; };
+		FF83735D1DC63FD100B99C6F /* FSInteractiveMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = FF8373491DC63FD100B99C6F /* FSInteractiveMapView.m */; };
+		FF83735E1DC63FD100B99C6F /* FSSVG.m in Sources */ = {isa = PBXBuildFile; fileRef = FF83734C1DC63FD100B99C6F /* FSSVG.m */; };
+		FF83735F1DC63FD100B99C6F /* FSSVGPathElement.m in Sources */ = {isa = PBXBuildFile; fileRef = FF83734E1DC63FD100B99C6F /* FSSVGPathElement.m */; };
+		FF8373601DC63FD100B99C6F /* FSSVGUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = FF8373501DC63FD100B99C6F /* FSSVGUtils.m */; };
+		FF8373641DC645D100B99C6F /* map.svg in Resources */ = {isa = PBXBuildFile; fileRef = FF8373631DC645D100B99C6F /* map.svg */; };
 		FF8461CA1DC61F5A00B4DED1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FF8461C91DC61F5A00B4DED1 /* main.m */; };
 		FF8461CD1DC61F5A00B4DED1 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FF8461CC1DC61F5A00B4DED1 /* AppDelegate.m */; };
 		FF8461D01DC61F5A00B4DED1 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FF8461CF1DC61F5A00B4DED1 /* ViewController.m */; };
@@ -36,6 +53,27 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		FF83733C1DC63FD100B99C6F /* austria-low.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "austria-low.svg"; sourceTree = "<group>"; };
+		FF83733D1DC63FD100B99C6F /* beef-cuts.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "beef-cuts.svg"; sourceTree = "<group>"; };
+		FF83733E1DC63FD100B99C6F /* china-low.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "china-low.svg"; sourceTree = "<group>"; };
+		FF83733F1DC63FD100B99C6F /* europe.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = europe.svg; sourceTree = "<group>"; };
+		FF8373401DC63FD100B99C6F /* france-low.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "france-low.svg"; sourceTree = "<group>"; };
+		FF8373411DC63FD100B99C6F /* germany.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = germany.svg; sourceTree = "<group>"; };
+		FF8373421DC63FD100B99C6F /* india-low.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "india-low.svg"; sourceTree = "<group>"; };
+		FF8373431DC63FD100B99C6F /* italy.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = italy.svg; sourceTree = "<group>"; };
+		FF8373441DC63FD100B99C6F /* uk-low.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "uk-low.svg"; sourceTree = "<group>"; };
+		FF8373451DC63FD100B99C6F /* usa-low.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "usa-low.svg"; sourceTree = "<group>"; };
+		FF8373461DC63FD100B99C6F /* world-continents-low.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "world-continents-low.svg"; sourceTree = "<group>"; };
+		FF8373471DC63FD100B99C6F /* world-low.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "world-low.svg"; sourceTree = "<group>"; };
+		FF8373481DC63FD100B99C6F /* FSInteractiveMapView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSInteractiveMapView.h; sourceTree = "<group>"; };
+		FF8373491DC63FD100B99C6F /* FSInteractiveMapView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSInteractiveMapView.m; sourceTree = "<group>"; };
+		FF83734B1DC63FD100B99C6F /* FSSVG.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSSVG.h; sourceTree = "<group>"; };
+		FF83734C1DC63FD100B99C6F /* FSSVG.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSSVG.m; sourceTree = "<group>"; };
+		FF83734D1DC63FD100B99C6F /* FSSVGPathElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSSVGPathElement.h; sourceTree = "<group>"; };
+		FF83734E1DC63FD100B99C6F /* FSSVGPathElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSSVGPathElement.m; sourceTree = "<group>"; };
+		FF83734F1DC63FD100B99C6F /* FSSVGUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSSVGUtils.h; sourceTree = "<group>"; };
+		FF8373501DC63FD100B99C6F /* FSSVGUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSSVGUtils.m; sourceTree = "<group>"; };
+		FF8373631DC645D100B99C6F /* map.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = map.svg; sourceTree = "<group>"; };
 		FF8461C51DC61F5A00B4DED1 /* photo_map.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = photo_map.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF8461C91DC61F5A00B4DED1 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		FF8461CB1DC61F5A00B4DED1 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -80,9 +118,54 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		FF83733A1DC63FD100B99C6F /* FSInteractiveMap */ = {
+			isa = PBXGroup;
+			children = (
+				FF83733B1DC63FD100B99C6F /* Data */,
+				FF8373481DC63FD100B99C6F /* FSInteractiveMapView.h */,
+				FF8373491DC63FD100B99C6F /* FSInteractiveMapView.m */,
+				FF83734A1DC63FD100B99C6F /* FSSVG */,
+			);
+			path = FSInteractiveMap;
+			sourceTree = "<group>";
+		};
+		FF83733B1DC63FD100B99C6F /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				FF8373631DC645D100B99C6F /* map.svg */,
+				FF83733C1DC63FD100B99C6F /* austria-low.svg */,
+				FF83733D1DC63FD100B99C6F /* beef-cuts.svg */,
+				FF83733E1DC63FD100B99C6F /* china-low.svg */,
+				FF83733F1DC63FD100B99C6F /* europe.svg */,
+				FF8373401DC63FD100B99C6F /* france-low.svg */,
+				FF8373411DC63FD100B99C6F /* germany.svg */,
+				FF8373421DC63FD100B99C6F /* india-low.svg */,
+				FF8373431DC63FD100B99C6F /* italy.svg */,
+				FF8373441DC63FD100B99C6F /* uk-low.svg */,
+				FF8373451DC63FD100B99C6F /* usa-low.svg */,
+				FF8373461DC63FD100B99C6F /* world-continents-low.svg */,
+				FF8373471DC63FD100B99C6F /* world-low.svg */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		FF83734A1DC63FD100B99C6F /* FSSVG */ = {
+			isa = PBXGroup;
+			children = (
+				FF83734B1DC63FD100B99C6F /* FSSVG.h */,
+				FF83734C1DC63FD100B99C6F /* FSSVG.m */,
+				FF83734D1DC63FD100B99C6F /* FSSVGPathElement.h */,
+				FF83734E1DC63FD100B99C6F /* FSSVGPathElement.m */,
+				FF83734F1DC63FD100B99C6F /* FSSVGUtils.h */,
+				FF8373501DC63FD100B99C6F /* FSSVGUtils.m */,
+			);
+			path = FSSVG;
+			sourceTree = "<group>";
+		};
 		FF8461BC1DC61F5A00B4DED1 = {
 			isa = PBXGroup;
 			children = (
+				FF83733A1DC63FD100B99C6F /* FSInteractiveMap */,
 				FF8461C71DC61F5A00B4DED1 /* photo_map */,
 				FF8461E41DC61F5A00B4DED1 /* photo_mapTests */,
 				FF8461EF1DC61F5B00B4DED1 /* photo_mapUITests */,
@@ -210,6 +293,7 @@
 				TargetAttributes = {
 					FF8461C41DC61F5A00B4DED1 = {
 						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = F9YBLEK3E7;
 						ProvisioningStyle = Automatic;
 					};
 					FF8461E01DC61F5A00B4DED1 = {
@@ -249,9 +333,22 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FF8373541DC63FD100B99C6F /* europe.svg in Resources */,
+				FF8373521DC63FD100B99C6F /* beef-cuts.svg in Resources */,
+				FF83735C1DC63FD100B99C6F /* world-low.svg in Resources */,
+				FF8373641DC645D100B99C6F /* map.svg in Resources */,
+				FF8373551DC63FD100B99C6F /* france-low.svg in Resources */,
+				FF83735B1DC63FD100B99C6F /* world-continents-low.svg in Resources */,
+				FF83735A1DC63FD100B99C6F /* usa-low.svg in Resources */,
+				FF8373561DC63FD100B99C6F /* germany.svg in Resources */,
+				FF8373581DC63FD100B99C6F /* italy.svg in Resources */,
+				FF8373531DC63FD100B99C6F /* china-low.svg in Resources */,
 				FF8461DB1DC61F5A00B4DED1 /* LaunchScreen.storyboard in Resources */,
+				FF8373511DC63FD100B99C6F /* austria-low.svg in Resources */,
+				FF8373571DC63FD100B99C6F /* india-low.svg in Resources */,
 				FF8461D81DC61F5A00B4DED1 /* Assets.xcassets in Resources */,
 				FF8461D31DC61F5A00B4DED1 /* Main.storyboard in Resources */,
+				FF8373591DC63FD100B99C6F /* uk-low.svg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -277,8 +374,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				FF8461D01DC61F5A00B4DED1 /* ViewController.m in Sources */,
+				FF8373601DC63FD100B99C6F /* FSSVGUtils.m in Sources */,
+				FF83735D1DC63FD100B99C6F /* FSInteractiveMapView.m in Sources */,
 				FF8461D61DC61F5A00B4DED1 /* photo_map.xcdatamodeld in Sources */,
+				FF83735E1DC63FD100B99C6F /* FSSVG.m in Sources */,
 				FF8461CD1DC61F5A00B4DED1 /* AppDelegate.m in Sources */,
+				FF83735F1DC63FD100B99C6F /* FSSVGPathElement.m in Sources */,
 				FF8461CA1DC61F5A00B4DED1 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -428,6 +529,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = F9YBLEK3E7;
 				INFOPLIST_FILE = photo_map/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "sunminlee.photo-map";
@@ -439,6 +541,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = F9YBLEK3E7;
 				INFOPLIST_FILE = photo_map/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "sunminlee.photo-map";
@@ -511,6 +614,7 @@
 				FF8461F71DC61F5B00B4DED1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		FF8461F81DC61F5B00B4DED1 /* Build configuration list for PBXNativeTarget "photo_mapTests" */ = {
 			isa = XCConfigurationList;
@@ -519,6 +623,7 @@
 				FF8461FA1DC61F5B00B4DED1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		FF8461FB1DC61F5B00B4DED1 /* Build configuration list for PBXNativeTarget "photo_mapUITests" */ = {
 			isa = XCConfigurationList;
@@ -527,6 +632,7 @@
 				FF8461FD1DC61F5B00B4DED1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
