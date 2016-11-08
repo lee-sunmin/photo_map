@@ -9,9 +9,10 @@
 #import "ViewController.h"
 #import "FSInteractiveMapView.h"
 
-@interface ViewController ()
+@interface ViewController () <UIScrollViewDelegate>
 @property (nonatomic, weak) CAShapeLayer* oldClickedLayer;
-
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (nonatomic, strong) FSInteractiveMapView* map;
 @end
 
 @implementation ViewController
@@ -21,6 +22,7 @@
 
     [self configureView];
     [self initExample3];
+    
 }
 
 #pragma mark - Examples
@@ -43,15 +45,15 @@
         self.detailDescriptionLabel.text = [NSString stringWithFormat:@"Continent clicked: %@", identifier];
     }];
     
-    [self.view addSubview:map];
+    [self.scrollView addSubview:map];
 }
 
 - (void)initExample3
 {
-    FSInteractiveMapView* map = [[FSInteractiveMapView alloc] initWithFrame:CGRectMake(16, 96, self.view.frame.size.width - 32, 500)];
-    [map loadMap:@"map" withColors:nil];
+    self.map = [[FSInteractiveMapView alloc] initWithFrame:CGRectMake(16, 96, self.view.frame.size.width - 32, 500)];
+    [self.map loadMap:@"map" withColors:nil];
     
-    [map setClickHandler:^(NSString* identifier, CAShapeLayer* layer) {
+    [self.map setClickHandler:^(NSString* identifier, CAShapeLayer* layer) {
         if(_oldClickedLayer) {
             _oldClickedLayer.zPosition = 0;
             _oldClickedLayer.shadowOpacity = 0;
@@ -67,7 +69,7 @@
         layer.shadowOffset = CGSizeMake(0, 0);
     }];
     
-    [self.view addSubview:map];
+    [self.scrollView addSubview:self.map];
 }
 
 - (void)setDetailItem:(id)newDetailItem {
@@ -87,9 +89,27 @@
     }
 }
 
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma-mark scroll view
+
+- (void)setScrollView:(UIScrollView *)scrollView
+{
+    _scrollView = scrollView;
+    _scrollView.minimumZoomScale = 1.0;
+    _scrollView.maximumZoomScale = 2.5;
+    _scrollView.delegate = self;
+
+    //self.scrollView.contentSize = self.view ? sizeOfScreen : CGSizeZero;
+}
+
+- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
+{
+    return self.map;
 }
 
 
