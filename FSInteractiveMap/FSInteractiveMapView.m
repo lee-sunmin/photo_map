@@ -56,6 +56,7 @@
         [scaled applyTransform:scaleTransform];
         
         CAShapeLayer *shapeLayer = [CAShapeLayer layer];
+
         shapeLayer.path = scaled.CGPath;
         
         // Setting CAShapeLayer properties
@@ -80,9 +81,65 @@
     }
 }
 
+- (void)loadMap:(NSString*)mapName withImage:(UIImage*)image withLayer:(CAShapeLayer*)layer
+{
+    
+    //_svg = [FSSVG svgWithFile:mapName];
+    
+    //for (FSSVGPathElement* path in _svg.paths) {
+        /*
+        // Make the map fits inside the frame
+        float scaleHorizontal = self.frame.size.width / _svg.bounds.size.width;
+        float scaleVertical = self.frame.size.height / _svg.bounds.size.height;
+        float scale = MIN(scaleHorizontal, scaleVertical);
+        
+        CGAffineTransform scaleTransform = CGAffineTransformIdentity;
+        scaleTransform = CGAffineTransformMakeScale(scale, scale);
+        scaleTransform = CGAffineTransformTranslate(scaleTransform,-_svg.bounds.origin.x, -_svg.bounds.origin.y);
+        
+        UIBezierPath* scaled = [path.path copy];
+        [scaled applyTransform:scaleTransform];
+     */
+        CAShapeLayer *shapeLayer = [CAShapeLayer layer];
+        
+     //   shapeLayer.path = scaled.CGPath;
+     
+     
+//        shapeLayer.strokeColor = self.strokeColor.CGColor;
+     //   shapeLayer.lineWidth = 0.5;
+     
+        for(int i=0;i<[_scaledPaths count];i++) {
+            //NSLog(@"layer : %@",layer);
+            //NSLog(@"shapeLayer : %@",self.layer.sublayers[i]);
+            
+            if ([layer isEqual:self.layer.sublayers[i]]) {
+                //layer.sublayers[i].contents = (id)(image.CGImage);
+                shapeLayer.contents =(id)(image.CGImage);
+                //shapeLayer.contents = (id)image.CGImage;
+                NSLog(@"layer : %@",layer);
+                NSLog(@"shapeLayer : %@",self.layer.sublayers[i]);
+                NSLog(@"success!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                [self.layer addSublayer:shapeLayer];
+            }
+            //else{
+            //    shapeLayer.fillColor = [[UIColor clearColor] CGColor];
+            //}
+        }
+        
+        //[self.layer addSublayer:shapeLayer];
+        
+        //[_scaledPaths addObject:scaled];
+    //}
+}
+
 - (void)loadMap:(NSString*)mapName withData:(NSDictionary*)data colorAxis:(NSArray*)colors
 {
     [self loadMap:mapName withColors:[self getColorsForData:data colorAxis:colors]];
+}
+
+- (void)loadMap:(NSString*)mapName withPhoto:(UIImage*)photo withLayer:(CAShapeLayer*)layer
+{
+    [self loadMap:mapName withImage:photo withLayer:layer];
 }
 
 - (NSDictionary*)getColorsForData:(NSDictionary*)data colorAxis:(NSArray*)colors
@@ -187,6 +244,7 @@
     
     for(int i=0;i<[_scaledPaths count];i++) {
         UIBezierPath* path = _scaledPaths[i];
+        // ***
         if ([path containsPoint:touchPoint])
         {
             FSSVGPathElement* element = _svg.paths[i];
