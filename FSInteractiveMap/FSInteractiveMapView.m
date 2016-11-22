@@ -7,16 +7,25 @@
 //
 
 #import "FSInteractiveMapView.h"
+#import "ViewController.h"
 #import "FSSVG.h"
 
 @interface FSInteractiveMapView ()
 
 @property (nonatomic, strong) FSSVG* svg;
 @property (nonatomic, strong) NSMutableArray* scaledPaths;
+@property (nonatomic, strong) ViewController* viewController;
 
 @end
 
 @implementation FSInteractiveMapView
+
+- (ViewController *)viewController
+{
+    if(!_viewController)
+        _viewController = [[ViewController alloc]init];
+    return _viewController;
+}
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -86,8 +95,8 @@
     
     //_svg = [FSSVG svgWithFile:mapName];
     
-    //for (FSSVGPathElement* path in _svg.paths) {
-        /*
+    for (FSSVGPathElement* path in _svg.paths) {
+        
         // Make the map fits inside the frame
         float scaleHorizontal = self.frame.size.width / _svg.bounds.size.width;
         float scaleVertical = self.frame.size.height / _svg.bounds.size.height;
@@ -96,40 +105,32 @@
         CGAffineTransform scaleTransform = CGAffineTransformIdentity;
         scaleTransform = CGAffineTransformMakeScale(scale, scale);
         scaleTransform = CGAffineTransformTranslate(scaleTransform,-_svg.bounds.origin.x, -_svg.bounds.origin.y);
-        
+     
         UIBezierPath* scaled = [path.path copy];
         [scaled applyTransform:scaleTransform];
-     */
+     
         CAShapeLayer *shapeLayer = [CAShapeLayer layer];
-        
-     //   shapeLayer.path = scaled.CGPath;
+        shapeLayer.path = scaled.CGPath;
      
-     
-//        shapeLayer.strokeColor = self.strokeColor.CGColor;
-     //   shapeLayer.lineWidth = 0.5;
+        //shapeLayer.strokeColor = self.strokeColor.CGColor;
+        //shapeLayer.lineWidth = 0.5;
      
         for(int i=0;i<[_scaledPaths count];i++) {
-            //NSLog(@"layer : %@",layer);
-            //NSLog(@"shapeLayer : %@",self.layer.sublayers[i]);
-            
-            if ([layer isEqual:self.layer.sublayers[i]]) {
+            if (path.fill &&[layer isEqual:self.layer.sublayers[i]]) {
                 //layer.sublayers[i].contents = (id)(image.CGImage);
                 shapeLayer.contents =(id)(image.CGImage);
-                //shapeLayer.contents = (id)image.CGImage;
+                NSLog(@"contents : %@",shapeLayer.contents);
+
                 NSLog(@"layer : %@",layer);
                 NSLog(@"shapeLayer : %@",self.layer.sublayers[i]);
-                NSLog(@"success!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                [self.layer addSublayer:shapeLayer];
             }
-            //else{
-            //    shapeLayer.fillColor = [[UIColor clearColor] CGColor];
-            //}
+            else{
+                shapeLayer.fillColor = [[UIColor clearColor] CGColor];
+            }
         }
-        
-        //[self.layer addSublayer:shapeLayer];
-        
-        //[_scaledPaths addObject:scaled];
-    //}
+        [self.layer addSublayer:shapeLayer];
+        [_scaledPaths addObject:scaled];
+    }
 }
 
 - (void)loadMap:(NSString*)mapName withData:(NSDictionary*)data colorAxis:(NSArray*)colors
@@ -259,5 +260,7 @@
         }
     }
 }
+
+
 
 @end

@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FSInteractiveMapView : UIView
+@interface FSInteractiveMapView : UIView <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 // Graphical properties
 @property (nonatomic, strong) UIColor* fillColor;
