@@ -7,25 +7,16 @@
 //
 
 #import "FSInteractiveMapView.h"
-#import "ViewController.h"
 #import "FSSVG.h"
 
 @interface FSInteractiveMapView ()
 
 @property (nonatomic, strong) FSSVG* svg;
 @property (nonatomic, strong) NSMutableArray* scaledPaths;
-@property (nonatomic, strong) ViewController* viewController;
 
 @end
 
 @implementation FSInteractiveMapView
-
-- (ViewController *)viewController
-{
-    if(!_viewController)
-        _viewController = [[ViewController alloc]init];
-    return _viewController;
-}
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -65,7 +56,6 @@
         [scaled applyTransform:scaleTransform];
         
         CAShapeLayer *shapeLayer = [CAShapeLayer layer];
-
         shapeLayer.path = scaled.CGPath;
         
         // Setting CAShapeLayer properties
@@ -90,57 +80,9 @@
     }
 }
 
-- (void)loadMap:(NSString*)mapName withImage:(UIImage*)image withLayer:(CAShapeLayer*)layer
-{
-    
-    //_svg = [FSSVG svgWithFile:mapName];
-    
-    for (FSSVGPathElement* path in _svg.paths) {
-        
-        // Make the map fits inside the frame
-        float scaleHorizontal = self.frame.size.width / _svg.bounds.size.width;
-        float scaleVertical = self.frame.size.height / _svg.bounds.size.height;
-        float scale = MIN(scaleHorizontal, scaleVertical);
-        
-        CGAffineTransform scaleTransform = CGAffineTransformIdentity;
-        scaleTransform = CGAffineTransformMakeScale(scale, scale);
-        scaleTransform = CGAffineTransformTranslate(scaleTransform,-_svg.bounds.origin.x, -_svg.bounds.origin.y);
-     
-        UIBezierPath* scaled = [path.path copy];
-        [scaled applyTransform:scaleTransform];
-     
-        CAShapeLayer *shapeLayer = [CAShapeLayer layer];
-        shapeLayer.path = scaled.CGPath;
-     
-        //shapeLayer.strokeColor = self.strokeColor.CGColor;
-        //shapeLayer.lineWidth = 0.5;
-     
-        for(int i=0;i<[_scaledPaths count];i++) {
-            if (path.fill &&[layer isEqual:self.layer.sublayers[i]]) {
-                //layer.sublayers[i].contents = (id)(image.CGImage);
-                shapeLayer.contents =(id)(image.CGImage);
-                NSLog(@"contents : %@",shapeLayer.contents);
-
-                NSLog(@"layer : %@",layer);
-                NSLog(@"shapeLayer : %@",self.layer.sublayers[i]);
-            }
-            else{
-                shapeLayer.fillColor = [[UIColor clearColor] CGColor];
-            }
-        }
-        [self.layer addSublayer:shapeLayer];
-        [_scaledPaths addObject:scaled];
-    }
-}
-
 - (void)loadMap:(NSString*)mapName withData:(NSDictionary*)data colorAxis:(NSArray*)colors
 {
     [self loadMap:mapName withColors:[self getColorsForData:data colorAxis:colors]];
-}
-
-- (void)loadMap:(NSString*)mapName withPhoto:(UIImage*)photo withLayer:(CAShapeLayer*)layer
-{
-    [self loadMap:mapName withImage:photo withLayer:layer];
 }
 
 - (NSDictionary*)getColorsForData:(NSDictionary*)data colorAxis:(NSArray*)colors
@@ -242,25 +184,41 @@
 {
     UITouch *touch = [touches anyObject];
     CGPoint touchPoint = [touch locationInView:self];
-    
+    self.x = touchPoint.x;
+    self.y = touchPoint.y;
     for(int i=0;i<[_scaledPaths count];i++) {
         UIBezierPath* path = _scaledPaths[i];
-        // ***
         if ([path containsPoint:touchPoint])
         {
             FSSVGPathElement* element = _svg.paths[i];
             
             if([self.layer.sublayers[i] isKindOfClass:CAShapeLayer.class] && element.fill) {
-                CAShapeLayer* l = (CAShapeLayer*)self.layer.sublayers[i];
+                
+                CALayer* l = (CALayer*)self.layer.sublayers[i];
+                
+                
+                
+                
+                //CALayer *layer = [CALayer layer];
+                
+                //l.contentsCenter = CGRectMake(touchPoint.x, touchPoint.y, 5, 5);
+                
+                //UIImage * image = [UIImage imageNamed:@"disclosure"];
+                //l.contents = (__bridge id _Nullable)([UIImage imageNamed:@"disclosure"].CGImage);
+                
+                //[l addSublayer:layer];
+                
+                //l.contents = (id)image.CGImage;
+                
+                //l.fillColor=[UIColor blueColor].CGColor ;
                 
                 if(_clickHandler) {
                     _clickHandler(element.identifier, l);
                 }
+                
             }
         }
     }
 }
-
-
 
 @end

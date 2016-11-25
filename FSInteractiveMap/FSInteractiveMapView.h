@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FSInteractiveMapView : UIView <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@interface FSInteractiveMapView : UIView
 
 // Graphical properties
 @property (nonatomic, strong) UIColor* fillColor;
@@ -20,8 +20,6 @@
 // Loading functions
 - (void)loadMap:(NSString*)mapName withColors:(NSDictionary*)colorsDict;
 - (void)loadMap:(NSString*)mapName withData:(NSDictionary*)data colorAxis:(NSArray*)colors;
-- (void)loadMap:(NSString*)mapName withPhoto:(UIImage*)image withLayer:(CAShapeLayer*)layer;
-
 
 // Set the colors by element, if you want to make the map dynamic or update the colors
 - (void)setColors:(NSDictionary*)colorsDict;
@@ -29,5 +27,8 @@
 
 // Layers enumeration
 - (void)enumerateLayersUsingBlock:(void(^)(NSString* identifier, CAShapeLayer* layer))block;
+
+@property float x;
+@property float y;
 
 @end

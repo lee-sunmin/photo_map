@@ -8,10 +8,11 @@
 
 #import "ViewController.h"
 #import "FSInteractiveMapView.h"
+#import <QuartzCore/QuartzCore.h>
+
 
 @interface ViewController () <UIScrollViewDelegate>
-//CAShapeLayer
-@property (nonatomic, weak) CAShapeLayer* oldClickedLayer;
+//@property (nonatomic, weak) CALayer* oldClickedLayer;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (nonatomic, strong) FSInteractiveMapView* map;
 //
@@ -19,7 +20,6 @@
 @end
 
 @implementation ViewController{
-    CAShapeLayer* saveLayer;
     BOOL hasImage;
 }
 
@@ -64,6 +64,60 @@
 }
 */
 
+/*
+ 
+ //layer.sublayers = nil;
+ 
+ //a.frame = CGRectMake(0, 0, layer.frame.size.width, layer.frame.size.height);
+ //[layer insertSublayer:a atIndex:0];
+ 
+ //[layer setContents:(id)self.image.CGImage];
+ // 이게 정답
+ //layer.fillColor = [UIColor colorWithPatternImage:self.image].CGColor;
+ 
+ //layer.contents = (id) [UIImage imageNamed:@"disclosure,png"].CGImage;
+ 
+ //layer = [[CALayer alloc] init];
+ //layer.bounds = CGRectMake(0, 0, self.image.size.width, self.image.size.height);
+ //[layer setContents:(id)self.image.CGImage];
+ 
+ 
+ // layer 추가하는 방법
+ UIImage *backgroundImageSource = self.image;
+ CALayer *backgroundImage = [CALayer layer];
+ backgroundImage.zPosition = 0;
+ [backgroundImage setFrame:CGRectMake(0, 0, 20, 20)];
+ backgroundImage.contents = (id) backgroundImageSource.CGImage;
+ [layer addSublayer:backgroundImage];
+ 
+
+ UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
+ 
+ [imageView removeFromSuperview];
+ [imageView setImage:self.image];
+ //imageView.layer.mask = maskLayer;
+ [imageView.layer insertSublayer:layer atIndex:0];
+ 
+
+CALayer *imageLayer = [CALayer layer];
+imageLayer.frame = layer.bounds;
+imageLayer.cornerRadius = 10.0;
+imageLayer.contents = (id) self.image.CGImage;
+imageLayer.masksToBounds = YES;
+[layer addSublayer:imageLayer];
+//[layer setNeedsDisplay];
+
+//layer.fillColor=[UIColor clearColor].CGColor ;
+
+//CALayer *a = [CAShapeLayer layer];
+
+//a.bounds = CGRectMake(layer.position.x, layer.position.y, 20, 20);
+//a.frame = CGRectMake(0, 0, layer.frame.size.width, layer.frame.size.height);
+//a.fillColor = [UIColor blueColor].CGColor;
+//[layer addSublayer:a];
+
+
+ */
 
 - (void)initExample3
 {
@@ -71,34 +125,43 @@
     self.map = [[FSInteractiveMapView alloc] initWithFrame:CGRectMake(16, 96, self.view.frame.size.width - 32, 500)];
     [self.map loadMap:@"map" withColors:nil];
     
-    [self.map setClickHandler:^(NSString* identifier, CAShapeLayer* layer) {
-        if(_oldClickedLayer) {
-          //  _oldClickedLayer.zPosition = 0;
-        }
-        
-        _oldClickedLayer = layer;
-        
+    [self.map setClickHandler:^(NSString* identifier, CALayer* layer) {
+
         [self addImage];
         
-        if (hasImage) {
-            //layer.contents =(id)(self.image.CGImage);
-            //[layer setContents:(id)self.image.CGImage];
-            // 이게 정답
-            layer.fillColor = [UIColor colorWithPatternImage:self.image].CGColor;
-            
-            //layer.contents = (id)self.image.CGImage;
-            //[layer setContents:(id)self.image.CGImage];
-            NSLog(@"%@",self.image.CGImage);
-            
-            //layer.zPosition = 1.0f;
-            
-            //[layer setNeedsDisplay];
-        }
+        //UIImage *backgroundImageSource = [UIImage imageNamed:@"disclosure"];
+        UIImage *backgroundImageSource = self.image;
+        CALayer *backgroundImage = [CALayer layer];
+        backgroundImage.zPosition = 10;
+        
+        float imx = (self.image.size.width/2);
+        float imy = (self.image.size.height/2);
+        
+        NSLog(@"%f",imx);
+        NSLog(@"%f",imy);
+        
+        
+        [backgroundImage setFrame:CGRectMake(self.map.x-10, self.map.y-10, 20, 20)];
+        
+        NSLog(@"frame: %@", [NSValue valueWithCGRect:layer.frame]);
+        
+        backgroundImage.contents = (id) backgroundImageSource.CGImage;
+        [layer addSublayer:backgroundImage];
+        
+        //[self.map setNeedsDisplay];
         hasImage = YES;
     }];
     
     [self.scrollView addSubview:self.map];
 }
+
+/*
+-(void)drawRect:(CGRect)rect {
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    UIImage *img = self.image;
+    [img drawInRect:rect];
+}
+*/
 
 - (void)addImage
 {
@@ -173,10 +236,10 @@
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
     [picker dismissViewControllerAnimated:NO completion:nil];
-    UIImage* image = [info objectForKey:UIImagePickerControllerOriginalImage];
-    
+    UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
     // setting image size
     self.image = [self imageWithImage:image scaledToSize:CGSizeMake(30, 30)];
+    
 }
 
 
@@ -190,6 +253,8 @@
     UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     NSLog(@"success");
+    
+    NSLog(@"new image : %@",newImage);
     return newImage;
 }
 
