@@ -15,9 +15,18 @@
 //@property (nonatomic, weak) CALayer* oldClickedLayer;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (nonatomic, strong) FSInteractiveMapView* map;
-//
+@property (nonatomic, assign) TOCropViewCroppingStyle croppingStyle; //The cropping style
 @property (nonatomic, strong) UIImage* image;
+
+@property (nonatomic, assign) CGRect croppedFrame;
+@property (nonatomic, assign) NSInteger angle;
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+@property (nonatomic, strong) UIPopoverController *activityPopoverController;
+#pragma clang diagnostic pop
 @end
+
 
 @implementation ViewController{
     BOOL hasImage;
@@ -28,96 +37,9 @@
 
     [self configureView];
     [self initExample3];
-    //[self initExample1];
 }
 
 #pragma mark - Examples
-
-/*
-- (void)initExample3
-{
-    self.map = [[FSInteractiveMapView alloc] initWithFrame:CGRectMake(16, 96, self.view.frame.size.width - 32, 500)];
-    [self.map loadMap:@"map" withColors:nil];
-    
-    [self.map setClickHandler:^(NSString* identifier, CAShapeLayer* layer) {
-        if(_oldClickedLayer) {
-            _oldClickedLayer.zPosition = 0;
-            _oldClickedLayer.shadowOpacity = 0;
-        }
-        
-        _oldClickedLayer = layer;
-        
-        // We set a simple effect on the layer clicked to highlight it
-        layer.zPosition = 10;
-        layer.shadowOpacity = 0.5;
-        layer.shadowColor = [UIColor blackColor].CGColor;
-        layer.shadowRadius = 5;
-        layer.shadowOffset = CGSizeMake(0, 0);
-    }];
-    
-    [self.map setClickHandler:^(NSString* identifier, CAShapeLayer* layer) {
-        //self.detailDescriptionLabel.text = [NSString stringWithFormat:@"Continent clicked: %@", identifier];
-        NSLog(@"clicked : %@",identifier);
-    }];
-    
-    [self.scrollView addSubview:self.map];
-}
-*/
-
-/*
- 
- //layer.sublayers = nil;
- 
- //a.frame = CGRectMake(0, 0, layer.frame.size.width, layer.frame.size.height);
- //[layer insertSublayer:a atIndex:0];
- 
- //[layer setContents:(id)self.image.CGImage];
- // 이게 정답
- //layer.fillColor = [UIColor colorWithPatternImage:self.image].CGColor;
- 
- //layer.contents = (id) [UIImage imageNamed:@"disclosure,png"].CGImage;
- 
- //layer = [[CALayer alloc] init];
- //layer.bounds = CGRectMake(0, 0, self.image.size.width, self.image.size.height);
- //[layer setContents:(id)self.image.CGImage];
- 
- 
- // layer 추가하는 방법
- UIImage *backgroundImageSource = self.image;
- CALayer *backgroundImage = [CALayer layer];
- backgroundImage.zPosition = 0;
- [backgroundImage setFrame:CGRectMake(0, 0, 20, 20)];
- backgroundImage.contents = (id) backgroundImageSource.CGImage;
- [layer addSublayer:backgroundImage];
- 
-
- UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
- 
- [imageView removeFromSuperview];
- [imageView setImage:self.image];
- //imageView.layer.mask = maskLayer;
- [imageView.layer insertSublayer:layer atIndex:0];
- 
-
-CALayer *imageLayer = [CALayer layer];
-imageLayer.frame = layer.bounds;
-imageLayer.cornerRadius = 10.0;
-imageLayer.contents = (id) self.image.CGImage;
-imageLayer.masksToBounds = YES;
-[layer addSublayer:imageLayer];
-//[layer setNeedsDisplay];
-
-//layer.fillColor=[UIColor clearColor].CGColor ;
-
-//CALayer *a = [CAShapeLayer layer];
-
-//a.bounds = CGRectMake(layer.position.x, layer.position.y, 20, 20);
-//a.frame = CGRectMake(0, 0, layer.frame.size.width, layer.frame.size.height);
-//a.fillColor = [UIColor blueColor].CGColor;
-//[layer addSublayer:a];
-
-
- */
 
 - (void)initExample3
 {
@@ -129,39 +51,34 @@ imageLayer.masksToBounds = YES;
 
         [self addImage];
         
-        //UIImage *backgroundImageSource = [UIImage imageNamed:@"disclosure"];
-        UIImage *backgroundImageSource = self.image;
-        CALayer *backgroundImage = [CALayer layer];
-        backgroundImage.zPosition = 10;
-        
-        float imx = (self.image.size.width/2);
-        float imy = (self.image.size.height/2);
-        
-        NSLog(@"%f",imx);
-        NSLog(@"%f",imy);
-        
-        
-        [backgroundImage setFrame:CGRectMake(self.map.x-10, self.map.y-10, 20, 20)];
-        
-        NSLog(@"frame: %@", [NSValue valueWithCGRect:layer.frame]);
-        
-        backgroundImage.contents = (id) backgroundImageSource.CGImage;
-        [layer addSublayer:backgroundImage];
-        
-        //[self.map setNeedsDisplay];
+        if (hasImage) {
+            
+            NSLog(@"%f",layer.frame.size.width);
+
+            UIImage *backgroundImageSource = self.image;
+            CALayer *backgroundImage = [CALayer layer];
+            backgroundImage.zPosition = 10;
+            
+            float imx = (self.image.size.width/2);
+            float imy = (self.image.size.height/2);
+            
+            NSLog(@"%f",imx);
+            NSLog(@"%f",imy);
+            
+            [backgroundImage setFrame:CGRectMake(self.map.x-10, self.map.y-10, 20, 20)];
+            
+            NSLog(@"frame: %@", [NSValue valueWithCGRect:layer.frame]);
+            
+            backgroundImage.contents = (id) backgroundImageSource.CGImage;
+            [layer addSublayer:backgroundImage];
+            
+        }
         hasImage = YES;
     }];
     
     [self.scrollView addSubview:self.map];
 }
 
-/*
--(void)drawRect:(CGRect)rect {
-    CGContextRef ctx = UIGraphicsGetCurrentContext();
-    UIImage *img = self.image;
-    [img drawInRect:rect];
-}
-*/
 
 - (void)addImage
 {
@@ -193,25 +110,21 @@ imageLayer.masksToBounds = YES;
                          handler:^(UIAlertAction * action)
                          {
                              //Do some thing here
+                             self.croppingStyle = TOCropViewCroppingStyleDefault;
                              
-                             
-                             UIImagePickerController* picker = [[UIImagePickerController alloc] init];
-                             picker.delegate = self;
-                             picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-                             
-                             [self presentViewController:picker animated:NO completion:nil];
-                             
-                             [view dismissViewControllerAnimated:YES completion:nil];
-                         }];
+                             UIImagePickerController *standardPicker = [[UIImagePickerController alloc] init];
+                             standardPicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+                             standardPicker.allowsEditing = NO;
+                             standardPicker.delegate = self;
+                             [self presentViewController:standardPicker animated:YES completion:nil];
+                              }];
     
     UIAlertAction* cancel = [UIAlertAction
                              actionWithTitle:@"CANCLE"
                              style:UIAlertActionStyleDefault
                              handler:^(UIAlertAction * action)
                              {
-                                 //Do some thing here
                                  [view dismissViewControllerAnimated:YES completion:nil];
-                                 
                              }];
     
     
@@ -220,26 +133,35 @@ imageLayer.masksToBounds = YES;
     [view addAction:cancel];
     [self presentViewController:view animated:YES completion:nil];
 }
-/*
-- (void)inputImage:(CAShapeLayer *)layer :(UIImage *)image{
-    //NSLog(@"image : %@",image);
-    //NSLog(@"layer : %@",saveLayer);
-    //[self.map loadMap:@"map" withPhoto:image withLayer:layer];
-    NSLog(@"in the input image");
-    
-    [_scrollView setNeedsDisplay];
-}
-*/
+
 
 #pragma mark - UIActionSheetDelegate
 
--(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingImage:(UIImage *)image editingInfo:(NSDictionary *)editingInfo
 {
-    [picker dismissViewControllerAnimated:NO completion:nil];
-    UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
-    // setting image size
-    self.image = [self imageWithImage:image scaledToSize:CGSizeMake(30, 30)];
-    
+    TOCropViewController *cropController = [[TOCropViewController alloc] initWithCroppingStyle:self.croppingStyle image:image];
+    cropController.delegate = self;
+    self.image = image;
+
+    [picker dismissViewControllerAnimated:YES completion:^{
+        [self presentViewController:cropController animated:YES completion:nil];
+    }];
+}
+
+
+#pragma mark - Cropper Delegate -
+- (void)cropViewController:(TOCropViewController *)cropViewController didCropToImage:(UIImage *)image withRect:(CGRect)cropRect angle:(NSInteger)angle
+{
+    self.croppedFrame = cropRect;
+    self.angle = angle;
+    [self updateImageViewWithImage:image fromCropViewController:cropViewController];
+}
+
+- (void)updateImageViewWithImage:(UIImage *)image fromCropViewController:(TOCropViewController *)cropViewController
+{
+    self.image = image;
+    //[self imageViewControll];
+    [cropViewController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 
@@ -257,6 +179,36 @@ imageLayer.masksToBounds = YES;
     NSLog(@"new image : %@",newImage);
     return newImage;
 }
+
+/*
+- (void)imageViewControll
+{
+    CGFloat padding = 20.0f;
+    
+    CGRect viewFrame = self.view.bounds;
+    viewFrame.size.width -= (padding * 2.0f);
+    viewFrame.size.height -= ((padding * 2.0f));
+    
+    CGRect imageFrame = CGRectZero;
+    imageFrame.size = self.imageView.image.size;
+    
+    if (self.imageView.image.size.width > viewFrame.size.width ||
+        self.imageView.image.size.height > viewFrame.size.height)
+    {
+        CGFloat scale = MIN(viewFrame.size.width / imageFrame.size.width, viewFrame.size.height / imageFrame.size.height);
+        imageFrame.size.width *= scale;
+        imageFrame.size.height *= scale;
+        imageFrame.origin.x = (CGRectGetWidth(self.view.bounds) - imageFrame.size.width) * 0.5f;
+        imageFrame.origin.y = (CGRectGetHeight(self.view.bounds) - imageFrame.size.height) * 0.5f;
+        self.imageView.frame = imageFrame;
+    }
+    else {
+        self.imageView.frame = imageFrame;
+        self.imageView.center = (CGPoint){CGRectGetMidX(self.view.bounds), CGRectGetMidY(self.view.bounds)};
+    }
+}
+*/
+
 
 
 - (void)setDetailItem:(id)newDetailItem {

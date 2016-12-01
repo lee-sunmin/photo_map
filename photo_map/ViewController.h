@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TOCropViewController.h"
 
-@interface ViewController : UIViewController<UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@interface ViewController : UIViewController<UIImagePickerControllerDelegate, UINavigationControllerDelegate, TOCropViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *btnGallery;
 @property (weak, nonatomic) IBOutlet UIButton *btnCamera;
