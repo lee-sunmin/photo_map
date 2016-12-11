@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "TOCropViewController.h"
 #import "FSInteractiveMapView.h"
+#import "FSSVG.h"
+#import "FSSVGPathElement.h"
 
 @interface ViewController : UIViewController<UIImagePickerControllerDelegate, UINavigationControllerDelegate, TOCropViewControllerDelegate>
 
@@ -16,6 +18,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *btnCamera;
 @property (weak, nonatomic) IBOutlet UIImageView *ivPickedImage;
 @property (nonatomic, strong) FSInteractiveMapView* map;
+@property (nonatomic, strong) FSSVG* svg;
 
 @property (strong, nonatomic) id detailItem;
 @property (weak, nonatomic) IBOutlet UILabel *detailDescriptionLabel;

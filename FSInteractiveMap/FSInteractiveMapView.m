@@ -8,20 +8,16 @@
 
 #import "FSInteractiveMapView.h"
 #import "FSSVG.h"
+#import "AppDelegate.h"
 
 @interface FSInteractiveMapView ()
 
 @property (nonatomic, strong) FSSVG* svg;
 @property (nonatomic, strong) NSMutableArray* scaledPaths;
-@property (nonatomic, strong) UIBezierPath* path;
+
 @end
 
 @implementation FSInteractiveMapView
-
--(UIBezierPath *)takenPath
-{
-    return self.path;
-}
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -47,10 +43,14 @@
 {
     _svg = [FSSVG svgWithFile:mapName];
     
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    appDelegate.fssvg = self.svg;
+    
     for (FSSVGPathElement* path in _svg.paths) {
         // Make the map fits inside the frame
         float scaleHorizontal = self.frame.size.width / _svg.bounds.size.width;
         float scaleVertical = self.frame.size.height / _svg.bounds.size.height;
+        
         float scale = MIN(scaleHorizontal, scaleVertical);
         
         CGAffineTransform scaleTransform = CGAffineTransformIdentity;
@@ -189,24 +189,22 @@
 {
     UITouch *touch = [touches anyObject];
     CGPoint touchPoint = [touch locationInView:self];
+    
     self.x = touchPoint.x;
     self.y = touchPoint.y;
+    
     for(int i=0;i<[_scaledPaths count];i++) {
-        self.path = _scaledPaths[i];
-        if ([self.path containsPoint:touchPoint])
+        UIBezierPath* path = _scaledPaths[i];
+        if ([path containsPoint:touchPoint])
         {
             FSSVGPathElement* element = _svg.paths[i];
             
             if([self.layer.sublayers[i] isKindOfClass:CAShapeLayer.class] && element.fill) {
-                
                 CAShapeLayer* l = (CAShapeLayer*)self.layer.sublayers[i];
-                
-                
                 
                 if(_clickHandler) {
                     _clickHandler(element.identifier, l);
                 }
-                
             }
         }
     }

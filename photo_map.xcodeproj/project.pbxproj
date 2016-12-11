@@ -155,6 +155,10 @@
 		FF6E2E5B1DFD84ED0059E880 /* DataBase */ = {
 			isa = PBXGroup;
 			children = (
+				FF6E2E521DFD810E0059E880 /* LocalImage.h */,
+				FF6E2E531DFD810E0059E880 /* LocalImage.m */,
+				FF6E2E541DFD810E0059E880 /* LocalImage+CoreDataProperties.h */,
+				FF6E2E551DFD810E0059E880 /* LocalImage+CoreDataProperties.m */,
 			);
 			name = DataBase;
 			sourceTree = "<group>";
@@ -207,10 +211,6 @@
 			isa = PBXGroup;
 			children = (
 				FF6E2E5B1DFD84ED0059E880 /* DataBase */,
-				FF6E2E521DFD810E0059E880 /* LocalImage.h */,
-				FF6E2E531DFD810E0059E880 /* LocalImage.m */,
-				FF6E2E541DFD810E0059E880 /* LocalImage+CoreDataProperties.h */,
-				FF6E2E551DFD810E0059E880 /* LocalImage+CoreDataProperties.m */,
 				FF890F381DED609500BAE8A1 /* TOCropViewController */,
 				FF83733A1DC63FD100B99C6F /* FSInteractiveMap */,
 				FF8461C71DC61F5A00B4DED1 /* photo_map */,

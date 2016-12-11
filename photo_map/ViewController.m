@@ -33,6 +33,8 @@
     BOOL hasImage;
 }
 
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self configureView];
@@ -44,8 +46,6 @@
 
 - (void)initExample3
 {
-    
-    //delegate.map = self.map;
     hasImage = NO;
     self.map = [[FSInteractiveMapView alloc] initWithFrame:CGRectMake(16, 96, self.view.frame.size.width - 32, 500)];
     [self.map loadMap:@"map" withColors:nil];
@@ -55,21 +55,67 @@
         [self addImage];
         
         if (hasImage) {
+            //self.image = [self imageWithImage:self.image scaledToSize:CGSizeMake(30,30)];
             
-            //            _oldClickedLayer = layer;
-            //
-            //            UIImage *backgroundImageSource = self.image;
-            //            CALayer *backgroundImage = [CALayer layer];
-            //            backgroundImage.zPosition = 10;
-            //
-            //            [backgroundImage setFrame:CGRectMake(self.map.x-10, self.map.y-10, 20, 20)];
-            //
-            //            backgroundImage.contents = (id) backgroundImageSource.CGImage;
-            //            [layer addSublayer:backgroundImage];
-            //
+            AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+            appDelegate.map = self.map;
+            self.svg = appDelegate.fssvg;
             
-            self.image = [self imageWithImage:self.image scaledToSize:CGSizeMake(30,30)];
-            layer.fillColor = [UIColor colorWithPatternImage:self.image].CGColor;
+            float scaleHorizontal = 343.000000 / _svg.bounds.size.width;
+            float scaleVertical = 500.000000 / _svg.bounds.size.height;
+            
+            float scale = MIN(scaleHorizontal, scaleVertical);
+            
+            CGAffineTransform scaleTransform = CGAffineTransformIdentity;
+            scaleTransform = CGAffineTransformMakeScale(scale, scale);
+            //scaleTransform = CGAffineTransformTranslate(scaleTransform,-_svg.bounds.origin.x, -_svg.bounds.origin.y);
+            
+            FSSVGPathElement* temp;
+            for(int i = 0; i < 242; i++){
+                FSSVGPathElement* element = _svg.paths[i];
+                if ([element.identifier isEqualToString:identifier] && element.fill) {
+                    temp = element;
+                    break;
+                }
+            }
+            
+            UIBezierPath* scaled = [temp.path copy];
+            [scaled applyTransform:scaleTransform];
+            
+            UIImageView *maskedImageView = [[UIImageView alloc] initWithImage:self.image];
+            
+            CAShapeLayer *theLayer = [[CAShapeLayer alloc] init];
+            theLayer.path = scaled.CGPath;
+        
+            layer.fillColor = [UIColor clearColor].CGColor;
+            
+            maskedImageView.layer.mask = theLayer;
+            [maskedImageView.layer addSublayer:layer];
+            [self.map addSubview:maskedImageView];
+            
+            
+            // save//
+//            float scaleHorizontal = 0.675197;
+//            float scaleVertical = 0.699302;
+//            
+//            float scale = MIN(scaleHorizontal, scaleVertical);
+//            
+//            CGAffineTransform scaleTransform = CGAffineTransformIdentity;
+//            scaleTransform = CGAffineTransformMakeScale(scale, scale);
+//            scaleTransform = CGAffineTransformTranslate(scaleTransform,-0.500000, -0.606000);
+//            
+//            UIBezierPath *scaled = [UIBezierPath bezierPathWithCGPath:layer.path];
+//            [scaled applyTransform:scaleTransform];
+//            
+//            CAShapeLayer *theLayer = [[CAShapeLayer alloc] init];
+//            theLayer.path = layer.path;
+//            
+//            UIImageView *maskedImageView = [[UIImageView alloc] initWithImage:self.image];
+//            maskedImageView.layer.mask = theLayer;
+//            [maskedImageView.layer addSublayer:layer];
+//            [self.view addSubview:maskedImageView];
+            
+            
             NSData *imageData = UIImagePNGRepresentation(self.image);
             [self add:identifier :imageData];
         }

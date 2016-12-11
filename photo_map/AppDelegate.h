@@ -10,12 +10,14 @@
 #import <CoreData/CoreData.h>
 #import "FSInteractiveMapView.h"
 #import "LocalImage.h"
+#import "FSSVG.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 
 @property (nonatomic, strong) FSInteractiveMapView* map;
+@property (nonatomic, strong) FSSVG* fssvg;
 
 @property (readonly, strong) NSPersistentContainer *persistentContainer;
 
@@ -25,6 +27,5 @@
 
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
-
 @end
 
