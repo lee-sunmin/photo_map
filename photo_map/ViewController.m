@@ -9,17 +9,18 @@
 #import "ViewController.h"
 #import "FSInteractiveMapView.h"
 #import <QuartzCore/QuartzCore.h>
-
+#import "AppDelegate.h"
 
 @interface ViewController () <UIScrollViewDelegate>
-//@property (nonatomic, weak) CALayer* oldClickedLayer;
+@property (nonatomic, weak) CALayer* oldClickedLayer;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
-@property (nonatomic, strong) FSInteractiveMapView* map;
+
 @property (nonatomic, assign) TOCropViewCroppingStyle croppingStyle; //The cropping style
 @property (nonatomic, strong) UIImage* image;
 
 @property (nonatomic, assign) CGRect croppedFrame;
 @property (nonatomic, assign) NSInteger angle;
+
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
@@ -34,44 +35,43 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
     [self configureView];
     [self initExample3];
 }
+
 
 #pragma mark - Examples
 
 - (void)initExample3
 {
+    
+    //delegate.map = self.map;
     hasImage = NO;
     self.map = [[FSInteractiveMapView alloc] initWithFrame:CGRectMake(16, 96, self.view.frame.size.width - 32, 500)];
     [self.map loadMap:@"map" withColors:nil];
     
-    [self.map setClickHandler:^(NSString* identifier, CALayer* layer) {
+    [self.map setClickHandler:^(NSString* identifier, CAShapeLayer* layer) {
 
         [self addImage];
         
         if (hasImage) {
             
-            NSLog(@"%f",layer.frame.size.width);
-
-            UIImage *backgroundImageSource = self.image;
-            CALayer *backgroundImage = [CALayer layer];
-            backgroundImage.zPosition = 10;
+            //            _oldClickedLayer = layer;
+            //
+            //            UIImage *backgroundImageSource = self.image;
+            //            CALayer *backgroundImage = [CALayer layer];
+            //            backgroundImage.zPosition = 10;
+            //
+            //            [backgroundImage setFrame:CGRectMake(self.map.x-10, self.map.y-10, 20, 20)];
+            //
+            //            backgroundImage.contents = (id) backgroundImageSource.CGImage;
+            //            [layer addSublayer:backgroundImage];
+            //
             
-            float imx = (self.image.size.width/2);
-            float imy = (self.image.size.height/2);
-            
-            NSLog(@"%f",imx);
-            NSLog(@"%f",imy);
-            
-            [backgroundImage setFrame:CGRectMake(self.map.x-10, self.map.y-10, 20, 20)];
-            
-            NSLog(@"frame: %@", [NSValue valueWithCGRect:layer.frame]);
-            
-            backgroundImage.contents = (id) backgroundImageSource.CGImage;
-            [layer addSublayer:backgroundImage];
-            
+            self.image = [self imageWithImage:self.image scaledToSize:CGSizeMake(30,30)];
+            layer.fillColor = [UIColor colorWithPatternImage:self.image].CGColor;
+            NSData *imageData = UIImagePNGRepresentation(self.image);
+            [self add:identifier :imageData];
         }
         hasImage = YES;
     }];
@@ -79,6 +79,66 @@
     [self.scrollView addSubview:self.map];
 }
 
+- (void)add:(NSString*)local :(NSData *)image
+{
+    
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    NSManagedObjectContext *context = appDelegate.managedObjectContext;
+    
+    //LocalImage *newAccount = [NSEntityDescription insertNewObjectForEntityForName:@"LocalImage" inManagedObjectContext:context];
+    NSManagedObject *newDevice = [NSEntityDescription insertNewObjectForEntityForName:@"LocalImage" inManagedObjectContext:context];
+    
+    NSManagedObject * isSame = [self searchDB:local];
+    if (isSame!=nil) {
+        [context deleteObject:isSame];
+    }
+    
+    [newDevice setValue:local forKey:@"local"];
+    [newDevice setValue:image forKey:@"image"];
+    
+    NSError *error = nil;
+    
+    // Save the object to persistent store
+    if (![context save:&error]) {
+        NSLog(@"Can't Save! %@ %@", error, [error localizedDescription]);
+    }
+}
+
+- (void)showAllDB
+{
+    
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    NSManagedObjectContext *context = appDelegate.managedObjectContext;
+    
+    NSFetchRequest* request = [[NSFetchRequest alloc]initWithEntityName:@"LocalImage"];
+    [request setReturnsObjectsAsFaults:NO];
+    NSEntityDescription* entity = [NSEntityDescription entityForName:@"LocalImage" inManagedObjectContext:context];
+    [request setEntity:entity];
+    
+    NSError *error = nil;
+    NSArray *fetchedObjects = [context executeFetchRequest:request error:&error];
+}
+
+- (NSManagedObject *)searchDB: (NSString *)local
+{
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    NSManagedObjectContext *context = appDelegate.managedObjectContext;
+    
+    NSFetchRequest* request = [[NSFetchRequest alloc]initWithEntityName:@"LocalImage"];
+    [request setReturnsObjectsAsFaults:NO];
+    NSEntityDescription* entity = [NSEntityDescription entityForName:@"LocalImage" inManagedObjectContext:context];
+    [request setEntity:entity];
+    
+    NSError *error = nil;
+    NSArray *fetchedObjects = [context executeFetchRequest:request error:&error];
+    
+    for(int i = 0; i < fetchedObjects.count; i++){
+        if ([[fetchedObjects[i] local]isEqualToString:local]) {
+            return fetchedObjects[i];
+        }
+    }
+    return nil;
+}
 
 - (void)addImage
 {
@@ -87,31 +147,13 @@
                                  message:@""
                                  preferredStyle:UIAlertControllerStyleActionSheet];
     
-    UIAlertAction* camera = [UIAlertAction
-                         actionWithTitle:@"camera"
-                         style:UIAlertActionStyleDefault
-                         handler:^(UIAlertAction * action)
-                         {
-                             //Do some thing here
-                             [view dismissViewControllerAnimated:YES completion:nil];
-                             
-                             UIImagePickerController* picker = [[UIImagePickerController alloc] init];
-                             picker.delegate = self;
-                             picker.sourceType = UIImagePickerControllerSourceTypeCamera;
-                             
-                             [self presentViewController:picker animated:NO completion:nil];
-                             
-                             [view dismissViewControllerAnimated:YES completion:nil];
-                         }];
-    
     UIAlertAction* album = [UIAlertAction
                          actionWithTitle:@"album"
                          style:UIAlertActionStyleDefault
                          handler:^(UIAlertAction * action)
                          {
                              //Do some thing here
-                             self.croppingStyle = TOCropViewCroppingStyleDefault;
-                             
+                             self.croppingStyle = TOCropViewCroppingStyleLayer;
                              UIImagePickerController *standardPicker = [[UIImagePickerController alloc] init];
                              standardPicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
                              standardPicker.allowsEditing = NO;
@@ -126,9 +168,7 @@
                              {
                                  [view dismissViewControllerAnimated:YES completion:nil];
                              }];
-    
-    
-    [view addAction:camera];
+
     [view addAction:album];
     [view addAction:cancel];
     [self presentViewController:view animated:YES completion:nil];
@@ -141,11 +181,11 @@
 {
     TOCropViewController *cropController = [[TOCropViewController alloc] initWithCroppingStyle:self.croppingStyle image:image];
     cropController.delegate = self;
+    //cropController.imageCropFrame = self.oldClickedLayer.frame;
+    
     self.image = image;
 
-    [picker dismissViewControllerAnimated:YES completion:^{
-        [self presentViewController:cropController animated:YES completion:nil];
-    }];
+    [picker pushViewController:cropController animated:YES];
 }
 
 

@@ -13,10 +13,15 @@
 
 @property (nonatomic, strong) FSSVG* svg;
 @property (nonatomic, strong) NSMutableArray* scaledPaths;
-
+@property (nonatomic, strong) UIBezierPath* path;
 @end
 
 @implementation FSInteractiveMapView
+
+-(UIBezierPath *)takenPath
+{
+    return self.path;
+}
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -187,30 +192,16 @@
     self.x = touchPoint.x;
     self.y = touchPoint.y;
     for(int i=0;i<[_scaledPaths count];i++) {
-        UIBezierPath* path = _scaledPaths[i];
-        if ([path containsPoint:touchPoint])
+        self.path = _scaledPaths[i];
+        if ([self.path containsPoint:touchPoint])
         {
             FSSVGPathElement* element = _svg.paths[i];
             
             if([self.layer.sublayers[i] isKindOfClass:CAShapeLayer.class] && element.fill) {
                 
-                CALayer* l = (CALayer*)self.layer.sublayers[i];
+                CAShapeLayer* l = (CAShapeLayer*)self.layer.sublayers[i];
                 
                 
-                
-                
-                //CALayer *layer = [CALayer layer];
-                
-                //l.contentsCenter = CGRectMake(touchPoint.x, touchPoint.y, 5, 5);
-                
-                //UIImage * image = [UIImage imageNamed:@"disclosure"];
-                //l.contents = (__bridge id _Nullable)([UIImage imageNamed:@"disclosure"].CGImage);
-                
-                //[l addSublayer:layer];
-                
-                //l.contents = (id)image.CGImage;
-                
-                //l.fillColor=[UIColor blueColor].CGColor ;
                 
                 if(_clickHandler) {
                     _clickHandler(element.identifier, l);

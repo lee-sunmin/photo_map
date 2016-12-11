@@ -8,16 +8,30 @@
 
 #import "AppDelegate.h"
 
-@interface AppDelegate ()
-
+@interface AppDelegate (){
+    //NSManagedObjectContext *context;
+}
+@property (strong) NSMutableArray *local;
+@property (nonatomic, strong) UIManagedDocument *contactDatabase;
 @end
 
 @implementation AppDelegate
 
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
     // Override point for customization after application launch.
+    self.map = [[FSInteractiveMapView alloc] init];
+
     return YES;
+}
+
+
+#pragma mark Initializations
+
+// Callback for fetch of managed document
+- (void)readyWithDocument:(UIManagedDocument *)managedDocument
+{
+    self.contactDatabase = managedDocument;
 }
 
 
@@ -52,34 +66,116 @@
 
 #pragma mark - Core Data stack
 
-@synthesize persistentContainer = _persistentContainer;
+@synthesize managedObjectContext = managedObjectContext;
+@synthesize managedObjectModel = managedObjectModel;
+@synthesize persistentStoreCoordinator = persistentStoreCoordinator;
 
-- (NSPersistentContainer *)persistentContainer {
-    // The persistent container for the application. This implementation creates and returns a container, having loaded the store for the application to it.
-    @synchronized (self) {
-        if (_persistentContainer == nil) {
-            _persistentContainer = [[NSPersistentContainer alloc] initWithName:@"photo_map"];
-            [_persistentContainer loadPersistentStoresWithCompletionHandler:^(NSPersistentStoreDescription *storeDescription, NSError *error) {
-                if (error != nil) {
-                    // Replace this implementation with code to handle the error appropriately.
-                    // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                    
-                    /*
-                     Typical reasons for an error here include:
-                     * The parent directory does not exist, cannot be created, or disallows writing.
-                     * The persistent store is not accessible, due to permissions or data protection when the device is locked.
-                     * The device is out of space.
-                     * The store could not be migrated to the current model version.
-                     Check the error message to determine what the actual problem was.
-                    */
-                    NSLog(@"Unresolved error %@, %@", error, error.userInfo);
-                    abort();
-                }
-            }];
+
+
+- (NSManagedObjectContext *)managedObjectContext
+{
+    if (managedObjectContext != nil) return managedObjectContext;
+    
+    NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
+    if (coordinator != nil) {
+        
+        managedObjectContext = [[NSManagedObjectContext alloc] init];
+        [managedObjectContext setPersistentStoreCoordinator:coordinator];
+    }
+    return managedObjectContext;
+}
+
+/**
+ Returns the managed object model for the application.
+ If the model doesn't already exist, it is created by merging all of the models found in the application bundle.
+ */
+- (NSManagedObjectModel *)managedObjectModel {
+    
+    if (managedObjectModel != nil) {
+        return managedObjectModel;
+    }
+    managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
+    return managedObjectModel;
+}
+
+/**
+ Returns the URL to the application's documents directory.
+ */
+- (NSURL *)applicationDocumentsDirectory
+{
+    return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+}
+
+/**
+ Returns the persistent store coordinator for the application.
+ If the coordinator doesn't already exist, it is created and the application's store added to it.
+ */
+- (NSPersistentStoreCoordinator *)persistentStoreCoordinator {
+    
+    if (persistentStoreCoordinator != nil) {
+        return persistentStoreCoordinator;
+    }
+    
+    // copy the default store (with a pre-populated data) into our Documents folder
+    //
+    NSString *documentsStorePath =
+    [[[self applicationDocumentsDirectory] path] stringByAppendingPathComponent:@"Recipes.sqlite"];
+    
+    // if the expected store doesn't exist, copy the default store
+    if (![[NSFileManager defaultManager] fileExistsAtPath:documentsStorePath]) {
+        NSString *defaultStorePath = [[NSBundle mainBundle] pathForResource:@"Recipes" ofType:@"sqlite"];
+        if (defaultStorePath) {
+            [[NSFileManager defaultManager] copyItemAtPath:defaultStorePath toPath:documentsStorePath error:NULL];
         }
     }
     
-    return _persistentContainer;
+    persistentStoreCoordinator =
+    [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
+    
+    // add the default store to our coordinator
+    NSError *error;
+    NSURL *defaultStoreURL = [NSURL fileURLWithPath:documentsStorePath];
+    if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType
+                                                   configuration:nil
+                                                             URL:defaultStoreURL
+                                                         options:nil
+                                                           error:&error]) {
+        /*
+         Replace this implementation with code to handle the error appropriately.
+         
+         abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. If it is not possible to recover from the error, display an alert panel that instructs the user to quit the application by pressing the Home button.
+         
+         Typical reasons for an error here include:
+         * The persistent store is not accessible
+         * The schema for the persistent store is incompatible with current managed object model
+         Check the error message to determine what the actual problem was.
+         */
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        abort();
+    }
+    
+    // setup and add the user's store to our coordinator
+    NSURL *userStoreURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"UserRecipes.sqlite"];
+    if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType
+                                                   configuration:nil
+                                                             URL:userStoreURL
+                                                         options:nil
+                                                           error:&error]) {
+        /*
+         Replace this implementation with code to handle the error appropriately.
+         
+         abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. If it is not possible to recover from the error, display an alert panel that instructs the user to quit the application by pressing the Home button.
+         
+         Typical reasons for an error here include:
+         * The persistent store is not accessible
+         * The schema for the persistent store is incompatible with current managed object model
+         Check the error message to determine what the actual problem was.
+         */
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        abort();
+    }
+    
+    return persistentStoreCoordinator;
 }
 
 #pragma mark - Core Data Saving support

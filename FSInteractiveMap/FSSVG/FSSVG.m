@@ -12,6 +12,7 @@
 @property (nonatomic, strong) NSMutableArray* transforms;
 @property (nonatomic) CGAffineTransform currentTransform;
 @end
+int i = 0;
 
 @implementation FSSVG
 
@@ -43,9 +44,16 @@
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict {
     
+    NSMutableDictionary *mutableAttributeDict = [attributeDict mutableCopy];
+    
     if([elementName isEqualToString:@"path"])
     {
-        FSSVGPathElement* element = [[FSSVGPathElement alloc] initWithAttributes:attributeDict];
+        NSString *inStr = [NSString stringWithFormat: @"%d", i];
+
+        [mutableAttributeDict setObject:inStr forKey:@"id"];
+        i++;
+        FSSVGPathElement* element = [[FSSVGPathElement alloc] initWithAttributes:mutableAttributeDict];
+        // here..
         if(element.path) {
             [_paths addObject:element];
         }

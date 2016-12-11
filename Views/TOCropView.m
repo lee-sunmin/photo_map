@@ -23,6 +23,8 @@
 #import "TOCropView.h"
 #import "TOCropOverlayView.h"
 #import "TOCropScrollView.h"
+#import "FSInteractiveMapView.h"
+#import "AppDelegate.h"
 
 #define TOCROPVIEW_BACKGROUND_COLOR [UIColor colorWithWhite:0.12f alpha:1.0f]
 
@@ -105,7 +107,9 @@ typedef NS_ENUM(NSInteger, TOCropViewOverlayEdge) {
  values until the view is configured for the first time. */
 @property (nonatomic, assign) NSInteger restoreAngle;
 @property (nonatomic, assign) CGRect    restoreImageCropFrame;
+//
 
+@property (nonatomic, strong) FSInteractiveMapView* mapView;
 - (void)setup;
 
 /* Image layout */
@@ -154,7 +158,7 @@ typedef NS_ENUM(NSInteger, TOCropViewOverlayEdge) {
 
 - (instancetype)initWithImage:(UIImage *)image
 {
-    return [self initWithCroppingStyle:TOCropViewCroppingStyleDefault image:image];
+    return [self initWithCroppingStyle:TOCropViewCroppingStyleLayer image:image];
 }
 
 - (void)setup
@@ -162,6 +166,7 @@ typedef NS_ENUM(NSInteger, TOCropViewOverlayEdge) {
     __weak typeof(self) weakSelf = self;
     
     BOOL circularMode = (self.croppingStyle == TOCropViewCroppingStyleCircular);
+    BOOL layerMode = (self.croppingStyle == TOCropViewCroppingStyleLayer);
     
     //View properties
     self.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
@@ -245,7 +250,20 @@ typedef NS_ENUM(NSInteger, TOCropViewOverlayEdge) {
         
         return;
     }
-    
+    /*
+    if (layerMode) {
+        AppDelegate *delegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
+        self.mapView = delegate.map;
+        
+        UIBezierPath *viewPath = [self.mapView takenPath];
+        NSLog(@"%@",viewPath);
+        self.circularMaskLayer = [[CAShapeLayer alloc] init];
+        self.circularMaskLayer.path = viewPath.CGPath;
+        self.foregroundContainerView.layer.mask = self.circularMaskLayer;
+        
+        return;
+    }*/
+
     // The white grid overlay view
     self.gridOverlayView = [[TOCropOverlayView alloc] initWithFrame:self.foregroundContainerView.frame];
     self.gridOverlayView.userInteractionEnabled = NO;

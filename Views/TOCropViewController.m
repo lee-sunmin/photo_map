@@ -378,6 +378,7 @@
 #pragma clang diagnostic pop
 
 #pragma mark - Reset -
+// 이전으로 되돌리기
 - (void)resetCropViewLayout
 {
     BOOL animated = (self.cropView.angle == 0);

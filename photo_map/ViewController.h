@@ -8,12 +8,14 @@
 
 #import <UIKit/UIKit.h>
 #import "TOCropViewController.h"
+#import "FSInteractiveMapView.h"
 
 @interface ViewController : UIViewController<UIImagePickerControllerDelegate, UINavigationControllerDelegate, TOCropViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *btnGallery;
 @property (weak, nonatomic) IBOutlet UIButton *btnCamera;
 @property (weak, nonatomic) IBOutlet UIImageView *ivPickedImage;
+@property (nonatomic, strong) FSInteractiveMapView* map;
 
 @property (strong, nonatomic) id detailItem;
 @property (weak, nonatomic) IBOutlet UILabel *detailDescriptionLabel;

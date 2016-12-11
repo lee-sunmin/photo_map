@@ -27,7 +27,7 @@
 
 // Layers enumeration
 - (void)enumerateLayersUsingBlock:(void(^)(NSString* identifier, CAShapeLayer* layer))block;
-
+-(UIBezierPath *)takenPath;
 @property float x;
 @property float y;
 

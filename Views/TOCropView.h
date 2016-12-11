@@ -24,6 +24,7 @@
 #import "TOCropOverlayView.h"
 
 typedef NS_ENUM(NSInteger, TOCropViewCroppingStyle) {
+    TOCropViewCroppingStyleLayer,
     TOCropViewCroppingStyleDefault,     // The regular, rectangular crop box
     TOCropViewCroppingStyleCircular     // A fixed, circular crop box
 };

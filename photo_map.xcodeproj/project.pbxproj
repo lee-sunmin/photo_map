@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FF6E2E561DFD810E0059E880 /* LocalImage.m in Sources */ = {isa = PBXBuildFile; fileRef = FF6E2E531DFD810E0059E880 /* LocalImage.m */; };
+		FF6E2E571DFD810E0059E880 /* LocalImage+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = FF6E2E551DFD810E0059E880 /* LocalImage+CoreDataProperties.m */; };
 		FF8373511DC63FD100B99C6F /* austria-low.svg in Resources */ = {isa = PBXBuildFile; fileRef = FF83733C1DC63FD100B99C6F /* austria-low.svg */; };
 		FF8373521DC63FD100B99C6F /* beef-cuts.svg in Resources */ = {isa = PBXBuildFile; fileRef = FF83733D1DC63FD100B99C6F /* beef-cuts.svg */; };
 		FF8373531DC63FD100B99C6F /* china-low.svg in Resources */ = {isa = PBXBuildFile; fileRef = FF83733E1DC63FD100B99C6F /* china-low.svg */; };
@@ -62,6 +64,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		FF6E2E521DFD810E0059E880 /* LocalImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalImage.h; sourceTree = "<group>"; };
+		FF6E2E531DFD810E0059E880 /* LocalImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalImage.m; sourceTree = "<group>"; };
+		FF6E2E541DFD810E0059E880 /* LocalImage+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "LocalImage+CoreDataProperties.h"; sourceTree = "<group>"; };
+		FF6E2E551DFD810E0059E880 /* LocalImage+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "LocalImage+CoreDataProperties.m"; sourceTree = "<group>"; };
 		FF83733C1DC63FD100B99C6F /* austria-low.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "austria-low.svg"; sourceTree = "<group>"; };
 		FF83733D1DC63FD100B99C6F /* beef-cuts.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "beef-cuts.svg"; sourceTree = "<group>"; };
 		FF83733E1DC63FD100B99C6F /* china-low.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "china-low.svg"; sourceTree = "<group>"; };
@@ -146,6 +152,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		FF6E2E5B1DFD84ED0059E880 /* DataBase */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = DataBase;
+			sourceTree = "<group>";
+		};
 		FF83733A1DC63FD100B99C6F /* FSInteractiveMap */ = {
 			isa = PBXGroup;
 			children = (
@@ -193,6 +206,11 @@
 		FF8461BC1DC61F5A00B4DED1 = {
 			isa = PBXGroup;
 			children = (
+				FF6E2E5B1DFD84ED0059E880 /* DataBase */,
+				FF6E2E521DFD810E0059E880 /* LocalImage.h */,
+				FF6E2E531DFD810E0059E880 /* LocalImage.m */,
+				FF6E2E541DFD810E0059E880 /* LocalImage+CoreDataProperties.h */,
+				FF6E2E551DFD810E0059E880 /* LocalImage+CoreDataProperties.m */,
 				FF890F381DED609500BAE8A1 /* TOCropViewController */,
 				FF83733A1DC63FD100B99C6F /* FSInteractiveMap */,
 				FF8461C71DC61F5A00B4DED1 /* photo_map */,
@@ -450,8 +468,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				FF890F351DED608B00BAE8A1 /* TOCroppedImageAttributes.m in Sources */,
+				FF6E2E561DFD810E0059E880 /* LocalImage.m in Sources */,
 				FF8461D01DC61F5A00B4DED1 /* ViewController.m in Sources */,
 				FF8373601DC63FD100B99C6F /* FSSVGUtils.m in Sources */,
+				FF6E2E571DFD810E0059E880 /* LocalImage+CoreDataProperties.m in Sources */,
 				FF890F2A1DED607B00BAE8A1 /* TOCropViewController.m in Sources */,
 				FF890F231DED606300BAE8A1 /* TOCropOverlayView.m in Sources */,
 				FF890F361DED608B00BAE8A1 /* TOCropViewControllerTransitioning.m in Sources */,
