@@ -11,6 +11,10 @@
 #import <QuartzCore/QuartzCore.h>
 #import "AppDelegate.h"
 
+#define ALTER_CANCLE NSLocalizedStringFromTable(@"ALTER_CANCLE",@"ViewController",@"CANCLE")
+#define ALTER_ALBUM NSLocalizedStringFromTable(@"ALTER_ALBUM",@"ViewController",@"ALBUM")
+#define ALTER_MENU NSLocalizedStringFromTable(@"ALTER_MENU",@"ViewController",@"MENU")
+
 @interface ViewController () <UIScrollViewDelegate>
 @property (nonatomic, weak) CALayer* oldClickedLayer;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
@@ -33,8 +37,6 @@
     BOOL hasImage;
 }
 
-
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self configureView];
@@ -51,17 +53,18 @@
     [self.map loadMap:@"map" withColors:nil];
     
     [self.map setClickHandler:^(NSString* identifier, CAShapeLayer* layer) {
-
+        
         [self addImage];
         
-        if (hasImage) {
-            //self.image = [self imageWithImage:self.image scaledToSize:CGSizeMake(30,30)];
+        if(hasImage){
+            
+            self.image = [self imageWithImage:self.image scaledToSize:CGSizeMake(200,200)];
             
             AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
             appDelegate.map = self.map;
             self.svg = appDelegate.fssvg;
             
-            float scaleHorizontal = 343.000000 / _svg.bounds.size.width;
+            float scaleHorizontal = 288.000000 / _svg.bounds.size.width;
             float scaleVertical = 500.000000 / _svg.bounds.size.height;
             
             float scale = MIN(scaleHorizontal, scaleVertical);
@@ -78,7 +81,7 @@
                     break;
                 }
             }
-            
+
             UIBezierPath* scaled = [temp.path copy];
             [scaled applyTransform:scaleTransform];
             
@@ -88,33 +91,25 @@
             theLayer.path = scaled.CGPath;
         
             layer.fillColor = [UIColor clearColor].CGColor;
-            
+
             maskedImageView.layer.mask = theLayer;
+            
+            //start
+
+            
+            NSLog(@"%f",self.map.x);
+            NSLog(@"%f",self.map.y);
+
+//            NSLog(@"%@",maskedImageView.layer.contents);
+//            CGRect oldFrame = maskedImageView.frame;
+//            CGRect newFrame = CGRectMake(self.map.x + 10, self.map.y, oldFrame.size.width, oldFrame.size.height);
+//            maskedImageView.frame = newFrame;
+//            self.redView.layer.zPosition = 1.0f;
+            
+            // end
+            
             [maskedImageView.layer addSublayer:layer];
             [self.map addSubview:maskedImageView];
-            
-            
-            // save//
-//            float scaleHorizontal = 0.675197;
-//            float scaleVertical = 0.699302;
-//            
-//            float scale = MIN(scaleHorizontal, scaleVertical);
-//            
-//            CGAffineTransform scaleTransform = CGAffineTransformIdentity;
-//            scaleTransform = CGAffineTransformMakeScale(scale, scale);
-//            scaleTransform = CGAffineTransformTranslate(scaleTransform,-0.500000, -0.606000);
-//            
-//            UIBezierPath *scaled = [UIBezierPath bezierPathWithCGPath:layer.path];
-//            [scaled applyTransform:scaleTransform];
-//            
-//            CAShapeLayer *theLayer = [[CAShapeLayer alloc] init];
-//            theLayer.path = layer.path;
-//            
-//            UIImageView *maskedImageView = [[UIImageView alloc] initWithImage:self.image];
-//            maskedImageView.layer.mask = theLayer;
-//            [maskedImageView.layer addSublayer:layer];
-//            [self.view addSubview:maskedImageView];
-            
             
             NSData *imageData = UIImagePNGRepresentation(self.image);
             [self add:identifier :imageData];
@@ -189,12 +184,12 @@
 - (void)addImage
 {
     UIAlertController * view=   [UIAlertController
-                                 alertControllerWithTitle:@"한가지를 선택해주세요."
-                                 message:@""
+                                 alertControllerWithTitle:@""
+                                 message:ALTER_MENU
                                  preferredStyle:UIAlertControllerStyleActionSheet];
     
     UIAlertAction* album = [UIAlertAction
-                         actionWithTitle:@"album"
+                         actionWithTitle:ALTER_ALBUM
                          style:UIAlertActionStyleDefault
                          handler:^(UIAlertAction * action)
                          {
@@ -208,7 +203,7 @@
                               }];
     
     UIAlertAction* cancel = [UIAlertAction
-                             actionWithTitle:@"CANCLE"
+                             actionWithTitle:ALTER_CANCLE
                              style:UIAlertActionStyleDefault
                              handler:^(UIAlertAction * action)
                              {
@@ -246,7 +241,8 @@
 - (void)updateImageViewWithImage:(UIImage *)image fromCropViewController:(TOCropViewController *)cropViewController
 {
     self.image = image;
-    //[self imageViewControll];
+    
+    // MODIFY!
     [cropViewController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 

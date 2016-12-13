@@ -1,0 +1,13 @@
+/* 
+  ViewController.strings
+  photo_map
+
+  Created by 이선민 on 2016. 12. 13..
+  Copyright © 2016년 이선민. All rights reserved.
+*/
+
+"ALTER_CANCLE" = "닫기";
+
+"ALTER_ALBUM" = "앨범";
+
+"ALTER_MENU" = "사진 추가";
