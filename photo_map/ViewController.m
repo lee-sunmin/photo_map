@@ -57,13 +57,13 @@
         [self addImage];
         
         if(hasImage){
-            
-            self.image = [self imageWithImage:self.image scaledToSize:CGSizeMake(200,200)];
+    
+            self.image = [self imageWithImage:self.image scaledToSize:CGSizeMake(50,50)];
             
             AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
             appDelegate.map = self.map;
             self.svg = appDelegate.fssvg;
-            
+
             float scaleHorizontal = 288.000000 / _svg.bounds.size.width;
             float scaleVertical = 500.000000 / _svg.bounds.size.height;
             
@@ -71,48 +71,49 @@
             
             CGAffineTransform scaleTransform = CGAffineTransformIdentity;
             scaleTransform = CGAffineTransformMakeScale(scale, scale);
-            //scaleTransform = CGAffineTransformTranslate(scaleTransform,-_svg.bounds.origin.x, -_svg.bounds.origin.y);
+            scaleTransform = CGAffineTransformTranslate(scaleTransform,-_svg.bounds.origin.x, -_svg.bounds.origin.y);
             
             FSSVGPathElement* temp;
             for(int i = 0; i < 242; i++){
                 FSSVGPathElement* element = _svg.paths[i];
-                if ([element.identifier isEqualToString:identifier] && element.fill) {
+                if ([element.identifier isEqualToString:identifier]) {
                     temp = element;
                     break;
                 }
             }
 
             UIBezierPath* scaled = [temp.path copy];
+
+            
             [scaled applyTransform:scaleTransform];
+
+            float scaled_height =scaled.bounds.size.height;
+            float scaled_width =scaled.bounds.size.width;
             
             UIImageView *maskedImageView = [[UIImageView alloc] initWithImage:self.image];
             
+            
+            UIImageView* tempImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.map.x-(scaled_width/2), self.map.y-(scaled_height/2), scaled_width+0.5, scaled_height+0.5)];
+            tempImageView.image = self.image;
+            
+            [maskedImageView.layer addSublayer:tempImageView.layer];
+            
             CAShapeLayer *theLayer = [[CAShapeLayer alloc] init];
             theLayer.path = scaled.CGPath;
-        
+            
             layer.fillColor = [UIColor clearColor].CGColor;
-
+//            layer.lineWidth = 3;
+//            layer.zPosition = 1.0f;
             maskedImageView.layer.mask = theLayer;
             
-            //start
-
-            
-            NSLog(@"%f",self.map.x);
-            NSLog(@"%f",self.map.y);
-
-//            NSLog(@"%@",maskedImageView.layer.contents);
-//            CGRect oldFrame = maskedImageView.frame;
-//            CGRect newFrame = CGRectMake(self.map.x + 10, self.map.y, oldFrame.size.width, oldFrame.size.height);
-//            maskedImageView.frame = newFrame;
-//            self.redView.layer.zPosition = 1.0f;
-            
-            // end
+//            maskedImageView.contentMode = UIViewContentModeScaleAspectFill;
             
             [maskedImageView.layer addSublayer:layer];
             [self.map addSubview:maskedImageView];
             
             NSData *imageData = UIImagePNGRepresentation(self.image);
             [self add:identifier :imageData];
+            
         }
         hasImage = YES;
     }];

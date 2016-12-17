@@ -10,6 +10,7 @@
 
 @interface AppDelegate (){
     //NSManagedObjectContext *context;
+    int i;
 }
 @property (strong) NSMutableArray *local;
 @property (nonatomic, strong) UIManagedDocument *contactDatabase;
@@ -21,11 +22,20 @@
     // Override point for customization after application launch.
     self.map = [[FSInteractiveMapView alloc] init];
     self.fssvg = [[FSSVG alloc]init];
+    i = -1;
     //
+    
+    
     
     //
 
     return YES;
+}
+
+- (int)getI
+{
+    i++;
+    return i;
 }
 
 

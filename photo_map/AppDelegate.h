@@ -27,5 +27,6 @@
 
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
+- (int)getI;
 @end
 

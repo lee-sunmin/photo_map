@@ -48,12 +48,15 @@ int i = 0;
     
     if([elementName isEqualToString:@"path"])
     {
-        NSString *inStr = [NSString stringWithFormat: @"%d", i];
-
-        [mutableAttributeDict setObject:inStr forKey:@"id"];
-        i++;
+//        NSString *inStr = [NSString stringWithFormat: @"%d", i];
+//
+//        [mutableAttributeDict setObject:inStr forKey:@"id"];
+//        i++;
+        
         FSSVGPathElement* element = [[FSSVGPathElement alloc] initWithAttributes:mutableAttributeDict];
+        
         // here..
+        
         if(element.path) {
             [_paths addObject:element];
         }

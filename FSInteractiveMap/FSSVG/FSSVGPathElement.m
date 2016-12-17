@@ -8,6 +8,7 @@
 
 #import "FSSVGPathElement.h"
 #import "FSSVGUtils.h"
+#import "AppDelegate.h"
 
 @interface FSSVGPathElement()
 @property (nonatomic) CGPoint lastPoint;
@@ -32,12 +33,17 @@
     self.path = nil;
     [self parsePathData:[attributes objectForKey:@"d"]];
     [FSSVGUtils parseTransform:self.tranform];
-    
+
     // Check the fill attribute
     if([attributes objectForKey:@"fill"] && [[attributes objectForKey:@"fill"] isEqualToString:@"none"]) {
         self.fill = NO;
     }
     
+    if (self.fill) {
+        AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        self.identifier = [NSString stringWithFormat:@"%d",appDelegate.getI];
+    }
     return self;
 }
 
