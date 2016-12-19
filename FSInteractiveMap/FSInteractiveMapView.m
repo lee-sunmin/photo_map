@@ -33,8 +33,10 @@
 
 - (void)setDefaultParameters
 {
-    self.fillColor = [UIColor colorWithWhite:0.85 alpha:1];
-    self.strokeColor = [UIColor colorWithWhite:0.6 alpha:1];
+    //self.fillColor = [UIColor colorWithWhite:0.85 alpha:1];
+    self.fillColor = [UIColor colorWithWhite:0.90 alpha:1];
+    //self.strokeColor = [UIColor colorWithWhite:0.5 alpha:1];
+    self.strokeColor = [UIColor colorWithWhite:0.75 alpha:1];
 }
 
 #pragma mark - SVG map loading
@@ -48,10 +50,13 @@
     
     for (FSSVGPathElement* path in _svg.paths) {
         // Make the map fits inside the frame
-        float scaleHorizontal = self.frame.size.width / _svg.bounds.size.width;
-        float scaleVertical = self.frame.size.height / _svg.bounds.size.height;
+        self.scaleHorizontal = self.frame.size.width / _svg.bounds.size.width;
+        self.scaleVertical = self.frame.size.height / _svg.bounds.size.height;
         
-        float scale = MIN(scaleHorizontal, scaleVertical);
+        appDelegate.scaleHorizontal = self.scaleHorizontal;
+        appDelegate.scaleVertical = self.scaleVertical;
+        
+        float scale = MIN(self.scaleHorizontal, self.scaleVertical);
         
         CGAffineTransform scaleTransform = CGAffineTransformIdentity;
         scaleTransform = CGAffineTransformMakeScale(scale, scale);
@@ -65,7 +70,7 @@
         
         // Setting CAShapeLayer properties
         shapeLayer.strokeColor = self.strokeColor.CGColor;
-        shapeLayer.lineWidth = 0.5;
+        shapeLayer.lineWidth = 1.5;
         
         if(path.fill) {
             if(colorsDict && [colorsDict objectForKey:path.identifier]) {

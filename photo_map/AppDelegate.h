@@ -28,5 +28,9 @@
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
 - (int)getI;
+
+@property float scaleHorizontal;
+@property float scaleVertical;
+
 @end
 

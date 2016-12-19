@@ -31,4 +31,6 @@
 @property float x;
 @property float y;
 
+@property float scaleHorizontal;
+@property float scaleVertical;
 @end

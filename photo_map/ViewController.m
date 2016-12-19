@@ -57,17 +57,17 @@
         [self addImage];
         
         if(hasImage){
-    
+            
+            if([layer.sublayers count] > 0)
+                [[layer.sublayers objectAtIndex:0] removeFromSuperlayer];
+
             self.image = [self imageWithImage:self.image scaledToSize:CGSizeMake(50,50)];
             
             AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
             appDelegate.map = self.map;
             self.svg = appDelegate.fssvg;
-
-            float scaleHorizontal = 288.000000 / _svg.bounds.size.width;
-            float scaleVertical = 500.000000 / _svg.bounds.size.height;
             
-            float scale = MIN(scaleHorizontal, scaleVertical);
+            float scale = MIN(appDelegate.scaleHorizontal, appDelegate.scaleVertical);
             
             CGAffineTransform scaleTransform = CGAffineTransformIdentity;
             scaleTransform = CGAffineTransformMakeScale(scale, scale);
@@ -83,7 +83,6 @@
             }
 
             UIBezierPath* scaled = [temp.path copy];
-
             
             [scaled applyTransform:scaleTransform];
 
@@ -102,14 +101,12 @@
             theLayer.path = scaled.CGPath;
             
             layer.fillColor = [UIColor clearColor].CGColor;
-//            layer.lineWidth = 3;
-//            layer.zPosition = 1.0f;
+            
             maskedImageView.layer.mask = theLayer;
             
-//            maskedImageView.contentMode = UIViewContentModeScaleAspectFill;
+            maskedImageView.contentMode = UIViewContentModeScaleAspectFill;
             
-            [maskedImageView.layer addSublayer:layer];
-            [self.map addSubview:maskedImageView];
+            [layer addSublayer:maskedImageView.layer];
             
             NSData *imageData = UIImagePNGRepresentation(self.image);
             [self add:identifier :imageData];

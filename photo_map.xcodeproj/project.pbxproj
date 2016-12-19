@@ -661,7 +661,7 @@
 				DEVELOPMENT_TEAM = F9YBLEK3E7;
 				INFOPLIST_FILE = photo_map/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "sunminlee.photo-map";
+				PRODUCT_BUNDLE_IDENTIFIER = kr.sunminlee.photomap;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -673,7 +673,7 @@
 				DEVELOPMENT_TEAM = F9YBLEK3E7;
 				INFOPLIST_FILE = photo_map/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "sunminlee.photo-map";
+				PRODUCT_BUNDLE_IDENTIFIER = kr.sunminlee.photomap;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
