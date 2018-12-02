@@ -85,8 +85,8 @@
     
     NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
     if (coordinator != nil) {
-        
-        managedObjectContext = [[NSManagedObjectContext alloc] init];
+        // change in iOS 9
+        managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
         [managedObjectContext setPersistentStoreCoordinator:coordinator];
     }
     return managedObjectContext;

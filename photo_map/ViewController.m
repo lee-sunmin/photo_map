@@ -25,7 +25,6 @@
 @property (nonatomic, assign) CGRect croppedFrame;
 @property (nonatomic, assign) NSInteger angle;
 
-
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 @property (nonatomic, strong) UIPopoverController *activityPopoverController;
@@ -48,13 +47,14 @@
 
 - (void)initExample3
 {
+    __weak typeof(self) weakSelf = self;
+
     hasImage = NO;
     self.map = [[FSInteractiveMapView alloc] initWithFrame:CGRectMake(16, 96, self.view.frame.size.width - 32, 500)];
     [self.map loadMap:@"map" withColors:nil];
-    
     [self.map setClickHandler:^(NSString* identifier, CAShapeLayer* layer) {
         
-        [self addImage];
+        [weakSelf addImage];
         
         if(hasImage){
             
@@ -154,8 +154,8 @@
     NSEntityDescription* entity = [NSEntityDescription entityForName:@"LocalImage" inManagedObjectContext:context];
     [request setEntity:entity];
     
-    NSError *error = nil;
-    NSArray *fetchedObjects = [context executeFetchRequest:request error:&error];
+    //NSError *error = nil;
+    //NSArray *fetchedObjects = [context executeFetchRequest:request error:&error];
 }
 
 - (NSManagedObject *)searchDB: (NSString *)local
