@@ -11,6 +11,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "AppDelegate.h"
 
+
 #define ALTER_CANCLE NSLocalizedStringFromTable(@"ALTER_CANCLE",@"ViewController",@"CANCLE")
 #define ALTER_ALBUM NSLocalizedStringFromTable(@"ALTER_ALBUM",@"ViewController",@"ALBUM")
 #define ALTER_MENU NSLocalizedStringFromTable(@"ALTER_MENU",@"ViewController",@"MENU")
@@ -48,71 +49,96 @@
 - (void)initExample3
 {
     __weak typeof(self) weakSelf = self;
-
+    
     hasImage = NO;
+    self.image = nil;
     self.map = [[FSInteractiveMapView alloc] initWithFrame:CGRectMake(16, 96, self.view.frame.size.width - 32, 500)];
     [self.map loadMap:@"map" withColors:nil];
     [self.map setClickHandler:^(NSString* identifier, CAShapeLayer* layer) {
         
-        [weakSelf addImage];
+        // Image not changed, not Selected
+        //if([weakSelf selectImageFromAlbum]){
         
-        if(hasImage){
+        //}else{ // changed
+        //self->hasImage = YES;
+        if(self.image == nil){
+            NSLog(@"Please Select Image!");
             
-            if([layer.sublayers count] > 0)
-                [[layer.sublayers objectAtIndex:0] removeFromSuperlayer];
-
-            self.image = [self imageWithImage:self.image scaledToSize:CGSizeMake(50,50)];
+            //Step 1: Create a UIAlertController
+            UIAlertController *myAlertController = [UIAlertController alertControllerWithTitle:@"warning"
+                                                                                       message: @"Please Select Image"
+                                                                                preferredStyle:UIAlertControllerStyleAlert];
             
-            AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-            appDelegate.map = self.map;
-            self.svg = appDelegate.fssvg;
+            //Step 2: Create a UIAlertAction that can be added to the alert
+            UIAlertAction* ok = [UIAlertAction
+                                 actionWithTitle:@"OK"
+                                 style:UIAlertActionStyleDefault
+                                 handler:^(UIAlertAction * action)
+                                 {
+                                     //Do some thing here, eg dismiss the alertwindow
+                                     [myAlertController dismissViewControllerAnimated:YES completion:nil];
+                                 }];
             
-            float scale = MIN(appDelegate.scaleHorizontal, appDelegate.scaleVertical);
+            //Step 3: Add the UIAlertAction ok that we just created to our AlertController
+            [myAlertController addAction: ok];
             
-            CGAffineTransform scaleTransform = CGAffineTransformIdentity;
-            scaleTransform = CGAffineTransformMakeScale(scale, scale);
-            scaleTransform = CGAffineTransformTranslate(scaleTransform,-_svg.bounds.origin.x, -_svg.bounds.origin.y);
-            
-            FSSVGPathElement* temp;
-            for(int i = 0; i < 242; i++){
-                FSSVGPathElement* element = _svg.paths[i];
-                if ([element.identifier isEqualToString:identifier]) {
-                    temp = element;
-                    break;
-                }
-            }
-
-            UIBezierPath* scaled = [temp.path copy];
-            
-            [scaled applyTransform:scaleTransform];
-
-            float scaled_height =scaled.bounds.size.height;
-            float scaled_width =scaled.bounds.size.width;
-            
-            UIImageView *maskedImageView = [[UIImageView alloc] initWithImage:self.image];
-            
-            
-            UIImageView* tempImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.map.x-(scaled_width/2), self.map.y-(scaled_height/2), scaled_width+0.5, scaled_height+0.5)];
-            tempImageView.image = self.image;
-            
-            [maskedImageView.layer addSublayer:tempImageView.layer];
-            
-            CAShapeLayer *theLayer = [[CAShapeLayer alloc] init];
-            theLayer.path = scaled.CGPath;
-            
-            layer.fillColor = [UIColor clearColor].CGColor;
-            
-            maskedImageView.layer.mask = theLayer;
-            
-            maskedImageView.contentMode = UIViewContentModeScaleAspectFill;
-            
-            [layer addSublayer:maskedImageView.layer];
-            
-            NSData *imageData = UIImagePNGRepresentation(self.image);
-            [self add:identifier :imageData];
-            
+            //Step 4: Present the alert to the user
+            [weakSelf presentViewController:myAlertController animated:YES completion:nil];
+            return;
         }
-        hasImage = YES;
+        
+        if([layer.sublayers count] > 0)
+            [[layer.sublayers objectAtIndex:0] removeFromSuperlayer];
+        
+        weakSelf.image = [weakSelf imageWithImage:weakSelf.image scaledToSize:CGSizeMake(50,50)];
+        
+        AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+        appDelegate.map = weakSelf.map;
+        weakSelf.svg = appDelegate.fssvg;
+        
+        float scale = MIN(appDelegate.scaleHorizontal, appDelegate.scaleVertical);
+        
+        CGAffineTransform scaleTransform = CGAffineTransformIdentity;
+        scaleTransform = CGAffineTransformMakeScale(scale, scale);
+        scaleTransform = CGAffineTransformTranslate(scaleTransform,-self->_svg.bounds.origin.x, -self->_svg.bounds.origin.y);
+        
+        FSSVGPathElement* temp;
+        for(int i = 0; i < 242; i++){
+            FSSVGPathElement* element = self->_svg.paths[i];
+            if ([element.identifier isEqualToString:identifier]) {
+                temp = element;
+                break;
+            }
+        }
+        
+        UIBezierPath* scaled = [temp.path copy];
+        
+        [scaled applyTransform:scaleTransform];
+        
+        float scaled_height =scaled.bounds.size.height;
+        float scaled_width =scaled.bounds.size.width;
+        
+        UIImageView *maskedImageView = [[UIImageView alloc] initWithImage:self.image];
+        
+        UIImageView* tempImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.map.x-(scaled_width/2), self.map.y-(scaled_height/2), scaled_width+0.5, scaled_height+0.5)];
+        tempImageView.image = self.image;
+        
+        [maskedImageView.layer addSublayer:tempImageView.layer];
+        
+        CAShapeLayer *theLayer = [[CAShapeLayer alloc] init];
+        theLayer.path = scaled.CGPath;
+        
+        layer.fillColor = [UIColor clearColor].CGColor;
+        
+        maskedImageView.layer.mask = theLayer;
+        
+        maskedImageView.contentMode = UIViewContentModeScaleAspectFill;
+        
+        [layer addSublayer:maskedImageView.layer];
+        
+        NSData *imageData = UIImagePNGRepresentation(self.image);
+        [self add:identifier :imageData];
+        //}
     }];
     
     [self.scrollView addSubview:self.map];
@@ -145,7 +171,6 @@
 
 - (void)showAllDB
 {
-    
     AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     NSManagedObjectContext *context = appDelegate.managedObjectContext;
     
@@ -179,26 +204,29 @@
     return nil;
 }
 
-- (void)addImage
+// true : same image, false : changed
+- (BOOL)selectImageFromAlbum
 {
+    UIImage* image = self.image;
+    
     UIAlertController * view=   [UIAlertController
                                  alertControllerWithTitle:@""
                                  message:ALTER_MENU
                                  preferredStyle:UIAlertControllerStyleActionSheet];
     
     UIAlertAction* album = [UIAlertAction
-                         actionWithTitle:ALTER_ALBUM
-                         style:UIAlertActionStyleDefault
-                         handler:^(UIAlertAction * action)
-                         {
-                             //Do some thing here
-                             self.croppingStyle = TOCropViewCroppingStyleLayer;
-                             UIImagePickerController *standardPicker = [[UIImagePickerController alloc] init];
-                             standardPicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-                             standardPicker.allowsEditing = NO;
-                             standardPicker.delegate = self;
-                             [self presentViewController:standardPicker animated:YES completion:nil];
-                              }];
+                            actionWithTitle:ALTER_ALBUM
+                            style:UIAlertActionStyleDefault
+                            handler:^(UIAlertAction * action)
+                            {
+                                // image pick and crop
+                                self.croppingStyle = TOCropViewCroppingStyleLayer;
+                                UIImagePickerController *standardPicker = [[UIImagePickerController alloc] init];
+                                standardPicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+                                standardPicker.allowsEditing = NO;
+                                standardPicker.delegate = self;
+                                [self presentViewController:standardPicker animated:YES completion:nil];
+                            }];
     
     UIAlertAction* cancel = [UIAlertAction
                              actionWithTitle:ALTER_CANCLE
@@ -207,10 +235,18 @@
                              {
                                  [view dismissViewControllerAnimated:YES completion:nil];
                              }];
-
+    
     [view addAction:album];
     [view addAction:cancel];
     [self presentViewController:view animated:YES completion:nil];
+    
+    NSLog(@"End SelectImageFromAlbum");
+    
+    if(image == self.image){
+        return true;
+    }else {
+        return false;
+    }
 }
 
 
@@ -223,7 +259,7 @@
     //cropController.imageCropFrame = self.oldClickedLayer.frame;
     
     self.image = image;
-
+    
     [picker pushViewController:cropController animated:YES];
 }
 
@@ -251,7 +287,7 @@
     // Pass 1.0 to force exact pixel size.
     UIGraphicsBeginImageContextWithOptions(newSize, NO, 0.0);
     [image drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
-
+    
     UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     NSLog(@"success");
@@ -261,33 +297,33 @@
 }
 
 /*
-- (void)imageViewControll
-{
-    CGFloat padding = 20.0f;
-    
-    CGRect viewFrame = self.view.bounds;
-    viewFrame.size.width -= (padding * 2.0f);
-    viewFrame.size.height -= ((padding * 2.0f));
-    
-    CGRect imageFrame = CGRectZero;
-    imageFrame.size = self.imageView.image.size;
-    
-    if (self.imageView.image.size.width > viewFrame.size.width ||
-        self.imageView.image.size.height > viewFrame.size.height)
-    {
-        CGFloat scale = MIN(viewFrame.size.width / imageFrame.size.width, viewFrame.size.height / imageFrame.size.height);
-        imageFrame.size.width *= scale;
-        imageFrame.size.height *= scale;
-        imageFrame.origin.x = (CGRectGetWidth(self.view.bounds) - imageFrame.size.width) * 0.5f;
-        imageFrame.origin.y = (CGRectGetHeight(self.view.bounds) - imageFrame.size.height) * 0.5f;
-        self.imageView.frame = imageFrame;
-    }
-    else {
-        self.imageView.frame = imageFrame;
-        self.imageView.center = (CGPoint){CGRectGetMidX(self.view.bounds), CGRectGetMidY(self.view.bounds)};
-    }
-}
-*/
+ - (void)imageViewControll
+ {
+ CGFloat padding = 20.0f;
+ 
+ CGRect viewFrame = self.view.bounds;
+ viewFrame.size.width -= (padding * 2.0f);
+ viewFrame.size.height -= ((padding * 2.0f));
+ 
+ CGRect imageFrame = CGRectZero;
+ imageFrame.size = self.imageView.image.size;
+ 
+ if (self.imageView.image.size.width > viewFrame.size.width ||
+ self.imageView.image.size.height > viewFrame.size.height)
+ {
+ CGFloat scale = MIN(viewFrame.size.width / imageFrame.size.width, viewFrame.size.height / imageFrame.size.height);
+ imageFrame.size.width *= scale;
+ imageFrame.size.height *= scale;
+ imageFrame.origin.x = (CGRectGetWidth(self.view.bounds) - imageFrame.size.width) * 0.5f;
+ imageFrame.origin.y = (CGRectGetHeight(self.view.bounds) - imageFrame.size.height) * 0.5f;
+ self.imageView.frame = imageFrame;
+ }
+ else {
+ self.imageView.frame = imageFrame;
+ self.imageView.center = (CGPoint){CGRectGetMidX(self.view.bounds), CGRectGetMidY(self.view.bounds)};
+ }
+ }
+ */
 
 
 
@@ -322,7 +358,7 @@
     _scrollView.minimumZoomScale = 1.0;
     _scrollView.maximumZoomScale = 6.5;
     _scrollView.delegate = self;
-
+    
     //self.scrollView.contentSize = self.view ? sizeOfScreen : CGSizeZero;
 }
 
@@ -332,4 +368,7 @@
 }
 
 
+- (IBAction)btnAddImg:(id)sender {
+    [self selectImageFromAlbum];
+}
 @end

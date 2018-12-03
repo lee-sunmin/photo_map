@@ -19,9 +19,11 @@
 @property (weak, nonatomic) IBOutlet UIImageView *ivPickedImage;
 @property (nonatomic, strong) FSInteractiveMapView* map;
 @property (nonatomic, strong) FSSVG* svg;
+@property (weak, nonatomic) IBOutlet UIButton *btnAddImg;
 
 @property (strong, nonatomic) id detailItem;
 @property (weak, nonatomic) IBOutlet UILabel *detailDescriptionLabel;
+- (IBAction)btnAddImg:(id)sender;
 
 @end
 
